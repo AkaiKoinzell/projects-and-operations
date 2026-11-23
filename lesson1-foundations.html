@@ -978,27 +978,27 @@
                     <div>
                         <h2 class="text-lg font-bold text-charcoal mb-2">Click any component of the Master PM Plan to inspect its contents:</h2>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
-                            <button onclick="window.inspectPmPlan(0)" class="p-3 rounded-xl bg-goldlight border-2 border-gold text-left hover:shadow transition">
+                            <button onclick="window.inspectPmPlan(0)" id="pm-plan-btn-0" class="p-3 rounded-xl bg-goldlight border-2 border-gold text-left hover:shadow transition">
                                 <div class="font-extrabold text-gold">1. Scope Baseline</div>
                                 <div class="text-gray-600 mt-0.5">Scope Statement + WBS + WBS Dictionary</div>
                             </button>
-                            <button onclick="window.inspectPmPlan(1)" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
+                            <button onclick="window.inspectPmPlan(1)" id="pm-plan-btn-1" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
                                 <div class="font-extrabold text-charcoal">2. Schedule Baseline</div>
                                 <div class="text-gray-600 mt-0.5">Approved Critical Path &amp; Gantt Milestones</div>
                             </button>
-                            <button onclick="window.inspectPmPlan(2)" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
+                            <button onclick="window.inspectPmPlan(2)" id="pm-plan-btn-2" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
                                 <div class="font-extrabold text-charcoal">3. Cost Baseline</div>
                                 <div class="text-gray-600 mt-0.5">Time-phased S-Curve Budget &amp; Contingency</div>
                             </button>
-                            <button onclick="window.inspectPmPlan(3)" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
+                            <button onclick="window.inspectPmPlan(3)" id="pm-plan-btn-3" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
                                 <div class="font-extrabold text-charcoal">4. Risk Register</div>
                                 <div class="text-gray-600 mt-0.5">Probability × Impact Matrix &amp; Mitigations</div>
                             </button>
-                            <button onclick="window.inspectPmPlan(4)" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
+                            <button onclick="window.inspectPmPlan(4)" id="pm-plan-btn-4" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
                                 <div class="font-extrabold text-charcoal">5. Change Control Plan</div>
                                 <div class="text-gray-600 mt-0.5">How CCB approves/rejects Scope Creep</div>
                             </button>
-                            <button onclick="window.inspectPmPlan(5)" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
+                            <button onclick="window.inspectPmPlan(5)" id="pm-plan-btn-5" class="p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition">
                                 <div class="font-extrabold text-charcoal">6. Comms &amp; Quality</div>
                                 <div class="text-gray-600 mt-0.5">Stakeholder cadence &amp; QA test gates</div>
                             </button>
@@ -2462,6 +2462,19 @@
 
         window.inspectPmPlan = function(idx) {
             document.getElementById('pm-plan-detail').innerHTML = pmPlanDetails[idx];
+            for (let i = 0; i < 6; i++) {
+                const btn = document.getElementById(`pm-plan-btn-${i}`);
+                if (btn) {
+                    const titleEl = btn.querySelector('div:first-child');
+                    if (i === idx) {
+                        btn.className = "p-3 rounded-xl bg-goldlight border-2 border-gold ring-2 ring-gold/30 text-left hover:shadow transition";
+                        if (titleEl) titleEl.className = "font-extrabold text-gold";
+                    } else {
+                        btn.className = "p-3 rounded-xl bg-cream border border-gold/40 text-left hover:bg-goldlight transition";
+                        if (titleEl) titleEl.className = "font-extrabold text-charcoal";
+                    }
+                }
+            }
         };
 
         // ==========================================
