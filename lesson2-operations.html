@@ -1,0 +1,2461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects and Operations - Lesson 2: Running the Engine (17-Slide Master Edition) | Rome Business School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#F3ECE3',
+                        gold: '#E89D00',
+                        goldhover: '#CC8A00',
+                        goldlight: '#FFF7E6',
+                        charcoal: '#3D3C3A',
+                        darktext: '#222222'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3ECE3;
+            color: #222222;
+            overflow: hidden;
+            user-select: none;
+        }
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+            transform: translateY(6px);
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .rbs-card {
+            background: #FFFFFF;
+            border: 1.5px solid #E89D00;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        }
+        .rbs-card-dark {
+            background: #3D3C3A;
+            color: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #E89D00;
+            cursor: pointer;
+            margin-top: -5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            border: 2px solid #FFF;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #DDD2C4;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #F3ECE3;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #E89D00;
+            border-radius: 4px;
+        }
+        .glass-drawer {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col justify-between relative">
+
+    <!-- ==========================================
+         TOP BRANDED HEADER WITH 3-HOUR PACING TRACKER
+         ========================================== -->
+    <header class="w-full px-6 md:px-8 pt-3 pb-1.5 flex justify-between items-center shrink-0 z-20">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="window.jumpToSlide(0)" title="Return to Title Slide">
+            <!-- Stylized Colosseum SVG Logo matching RBS branding -->
+            <svg class="w-14 h-10 text-charcoal" viewBox="0 0 120 80" fill="currentColor">
+                <path d="M10,72 L110,72 L95,70 L12,68 Z" />
+                <path d="M12,66 L85,64 C65,61 45,61 12,61 Z" />
+                <path d="M12,52 L88,49 C65,46 45,46 12,46 Z" />
+                <path d="M12,37 L84,34 C65,31 45,31 12,31 Z" />
+                <path d="M14,22 L72,18 C52,15 35,16 14,18 Z" />
+                <rect x="15" y="55" width="4" height="9" rx="2" fill="#F3ECE3"/>
+                <rect x="22" y="55" width="4" height="9" rx="2" fill="#F3ECE3"/>
+                <rect x="29" y="55" width="4" height="9" rx="2" fill="#F3ECE3"/>
+                <rect x="36" y="55" width="4" height="9" rx="2" fill="#F3ECE3"/>
+                <rect x="43" y="55" width="5" height="9" rx="2.5" fill="#F3ECE3"/>
+                <rect x="15" y="40" width="4" height="9" rx="2" fill="#F3ECE3"/>
+                <rect x="22" y="40" width="4" height="9" rx="2" fill="#F3ECE3"/>
+                <rect x="29" y="40" width="4" height="9" rx="2" fill="#F3ECE3"/>
+                <rect x="36" y="40" width="4" height="9" rx="2" fill="#F3ECE3"/>
+                <rect x="43" y="40" width="5" height="9" rx="2.5" fill="#F3ECE3"/>
+                <rect x="16" y="25" width="4" height="8" rx="2" fill="#F3ECE3"/>
+                <rect x="23" y="25" width="4" height="8" rx="2" fill="#F3ECE3"/>
+                <rect x="30" y="25" width="4" height="8" rx="2" fill="#F3ECE3"/>
+                <rect x="37" y="25" width="4" height="8" rx="2" fill="#F3ECE3"/>
+                <path d="M10,70 C10,25 45,8 78,6 C50,12 18,30 14,70 Z" />
+            </svg>
+            <div class="leading-tight">
+                <div class="font-extrabold text-xs md:text-sm tracking-widest text-charcoal">ROME</div>
+                <div class="font-bold text-[11px] tracking-widest text-charcoal">BUSINESS</div>
+                <div class="font-semibold text-[11px] tracking-widest text-gold">SCHOOL</div>
+            </div>
+        </div>
+
+        <!-- Center Pacing & Quick Action Bar -->
+        <div class="hidden lg:flex items-center gap-2 bg-white/95 border border-gold/40 px-3.5 py-1 rounded-full shadow-sm">
+            <span id="pacing-badge" class="px-2.5 py-0.5 rounded-full bg-charcoal text-gold text-[11px] font-bold tracking-wide">
+                🕒 Min 00–10 / 180m • Intro
+            </span>
+            <span class="text-gray-300">|</span>
+            <button onclick="window.openEnrichment('quote')" class="px-2.5 py-0.5 rounded-full hover:bg-gold hover:text-white text-charcoal text-xs font-semibold transition" title="Shortcut: Q">
+                💬 Citation
+            </button>
+            <button onclick="window.openEnrichment('tool')" class="px-2.5 py-0.5 rounded-full hover:bg-gold hover:text-white text-charcoal text-xs font-semibold transition" title="Shortcut: T">
+                🛠️ <span id="header-tool-label">Software UI</span>
+            </button>
+            <button onclick="window.openEnrichment('syllabus')" class="px-2.5 py-0.5 rounded-full hover:bg-gold hover:text-white text-charcoal text-xs font-semibold transition" title="Shortcut: S">
+                🎓 Syllabus ILO
+            </button>
+            <button onclick="window.toggleSlideGrid()" class="px-2.5 py-0.5 rounded-full bg-gold text-white hover:bg-goldhover text-xs font-bold transition" title="Shortcut: G">
+                ⊞ 17-Slide Map
+            </button>
+        </div>
+
+        <div class="text-right">
+            <div class="text-gold font-bold text-xs md:text-sm tracking-wide leading-tight">BETTER MANAGERS</div>
+            <div class="text-gold font-bold text-xs md:text-sm tracking-wide leading-tight">FOR A BETTER WORLD</div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         MAIN SLIDE STAGE (16 SLIDES)
+         Supports + / - / 0 keyboard zoom for massive screens
+         ========================================== -->
+    <main id="slide-stage" class="flex-grow relative w-full max-w-7xl mx-auto px-6 md:px-8 py-1 flex items-center justify-center overflow-y-auto custom-scroll transition-all duration-150">
+
+        <!-- ==========================================
+             SLIDE 1: TITLE & 3-HOUR LECTURE OVERVIEW
+             ========================================== -->
+        <section id="slide-0" class="slide active w-full h-full flex-col justify-between py-1">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end my-auto">
+                <div class="lg:col-span-8">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="px-3 py-0.5 bg-gold/15 text-gold font-bold text-xs uppercase tracking-widest rounded-full">Managerial Core Competencies • 3-Hour Session</span>
+                        <span class="px-3 py-0.5 bg-white border border-gold/40 text-charcoal font-medium text-xs rounded-full">Syllabus Rev. 2.0 • Prof. Raffaele Mannella</span>
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-bold text-gold tracking-tight mb-2">Projects and Operations</h1>
+                    <h2 class="text-2xl md:text-3xl font-medium text-charcoal">Lesson 2: Running the Engine</h2>
+                </div>
+                <div class="lg:col-span-4 text-left lg:text-right space-y-0.5 text-charcoal font-medium border-l-4 lg:border-l-0 lg:border-r-4 border-gold pl-4 lg:pl-0 lg:pr-4">
+                    <p class="text-sm">📍 Rome, Italy</p>
+                    <p class="text-sm">📅 2026-11-02</p>
+                    <p class="text-base font-bold text-darktext">Lorenzo de Virgilio</p>
+                </div>
+            </div>
+
+            <!-- Dark Charcoal Bottom Container matching Lesson 2 Slide 1 -->
+            <div class="w-full bg-charcoal text-white rounded-t-3xl rounded-b-xl p-5 md:p-6 shadow-xl mt-2 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                <div class="lg:col-span-5 space-y-2">
+                    <h3 class="text-sm font-bold text-gold uppercase tracking-wider">Lecture Overview <span class="text-xs font-normal text-gray-300">(Click to preview)</span></h3>
+                    <ul class="space-y-1.5 text-xs md:text-sm">
+                        <li onclick="window.previewTopic(0)" class="p-2 rounded-lg bg-white/5 hover:bg-gold/20 border border-white/10 hover:border-gold cursor-pointer transition flex items-center justify-between">
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-gold"></span> Use-Case Anchor, Flow Metrics &amp; Little's Law</span>
+                            <span class="text-[11px] text-gold font-semibold">Part 1 (50m) →</span>
+                        </li>
+                        <li onclick="window.previewTopic(1)" class="p-2 rounded-lg bg-white/5 hover:bg-gold/20 border border-white/10 hover:border-gold cursor-pointer transition flex items-center justify-between">
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-gold"></span> Bottlenecks &amp; Sensitivity Analysis</span>
+                            <span class="text-[11px] text-gold font-semibold">Part 2 (45m) →</span>
+                        </li>
+                        <li onclick="window.previewTopic(2)" class="p-2 rounded-lg bg-white/5 hover:bg-gold/20 border border-white/10 hover:border-gold cursor-pointer transition flex items-center justify-between">
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-gold"></span> Lean Manufacturing &amp; Eliminating Muda</span>
+                            <span class="text-[11px] text-gold font-semibold">Part 3 (45m) →</span>
+                        </li>
+                        <li onclick="window.previewTopic(3)" class="p-2 rounded-lg bg-white/5 hover:bg-gold/20 border border-white/10 hover:border-gold cursor-pointer transition flex items-center justify-between">
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-gold"></span> KPI Trees &amp; Operational Execution</span>
+                            <span class="text-[11px] text-gold font-semibold">Part 4 (40m) →</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Middle: Dynamic Preview Text -->
+                <div class="lg:col-span-4 bg-black/30 border border-gold/40 rounded-xl p-4 h-full flex flex-col justify-between">
+                    <div>
+                        <div class="text-[10px] uppercase tracking-widest text-gold font-bold mb-1" id="topic-preview-tag">USE-CASE DRIVEN OPERATIONS</div>
+                        <h4 class="text-base font-bold text-white mb-1" id="topic-preview-title">Zero Abstract Jargon — 100% Real Examples</h4>
+                        <p class="text-xs text-gray-300 leading-relaxed" id="topic-preview-desc">
+                            Starts with the 4 Strategic Dimensions of Operations, bridges into a live Roman Pizzeria use case, and features interactive Click-to-Reveal workshops with zero spoilers!
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-white/10 flex justify-between items-center">
+                        <span class="text-[11px] text-gray-400">17 Interactive Slides</span>
+                        <button id="topic-jump-btn" onclick="window.jumpToSlide(1)" class="px-3 py-1 bg-gold text-white text-xs font-bold rounded-lg hover:bg-goldhover transition">Start Engine →</button>
+                    </div>
+                </div>
+
+                <!-- Right: Split SVG matching Lesson 2 Slide 1 -->
+                <div class="lg:col-span-3 bg-white rounded-xl overflow-hidden border-2 border-gold shadow-lg">
+                    <svg viewBox="0 0 260 155" class="w-full h-36">
+                        <rect x="0" y="0" width="130" height="155" fill="#E2E8F0"/>
+                        <circle cx="30" cy="28" r="14" fill="#F8FAFC"/>
+                        <line x1="25" y1="140" x2="25" y2="20" stroke="#D97706" stroke-width="4"/>
+                        <line x1="15" y1="25" x2="115" y2="25" stroke="#D97706" stroke-width="3.5"/>
+                        <rect x="42" y="65" width="75" height="75" fill="none" stroke="#1E293B" stroke-width="3"/>
+                        <line x1="42" y1="90" x2="117" y2="90" stroke="#1E293B" stroke-width="2.5"/>
+                        <rect x="6" y="132" width="115" height="16" rx="3" fill="#475569"/>
+                        <text x="64" y="143" text-anchor="middle" fill="#CBD5E1" font-size="7.5" font-weight="bold">LESSON 1: BUILT IT</text>
+                        <line x1="130" y1="0" x2="130" y2="155" stroke="#111" stroke-width="3"/>
+                        <rect x="130" y="0" width="130" height="155" fill="#FFFBEB"/>
+                        <rect x="148" y="25" width="95" height="50" rx="5" fill="#1E293B" stroke="#E89D00" stroke-width="2"/>
+                        <text x="195" y="44" text-anchor="middle" fill="#E89D00" font-size="9" font-weight="bold">I = R × T</text>
+                        <text x="195" y="60" text-anchor="middle" fill="#6EE7B7" font-size="8" font-weight="bold">THROUGHPUT: 98%</text>
+                        <polygon points="140,125 255,125 260,155 130,155" fill="#FDE68A"/>
+                        <rect x="138" y="132" width="115" height="16" rx="3" fill="#E89D00"/>
+                        <text x="195" y="143" text-anchor="middle" fill="#FFF" font-size="7.5" font-weight="bold">LESSON 2: RUN ENGINE</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 2 [SYLLABUS DEEP-DIVE]: THE 4 DIMENSIONS OF OPERATIONS MANAGEMENT
+             Now placed BEFORE the Anchor Case as requested!
+             ========================================== -->
+        <section id="slide-1" class="slide w-full h-full flex-col justify-center py-1">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-3">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 bg-gold text-white rounded-full">Syllabus Section 1 • Strategic Trade-offs</span>
+                    <h1 class="text-3xl md:text-5xl font-bold text-gold mt-1">1. The Four Dimensions of Operations</h1>
+                </div>
+                <span class="text-xs text-charcoal font-medium">You cannot be #1 at all four! Click a business model on the right to see its operational trade-off.</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: The 4 Competitive Dimensions -->
+                <div class="lg:col-span-6 grid grid-cols-2 gap-3">
+                    <div onclick="window.inspectDimension(0)" id="dim-card-0" class="rbs-card p-4 cursor-pointer border-2 border-gold bg-goldlight transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center"><span class="text-xs font-extrabold uppercase text-gold">Dimension 1</span><span class="text-xl">💶</span></div>
+                            <h3 class="text-lg font-bold text-charcoal mt-1">1. Cost</h3>
+                            <p class="text-xs text-gray-700 mt-1">Delivering the product or service at the lowest possible unit cost through scale and standardization.</p>
+                        </div>
+                        <div class="mt-2 text-[11px] font-bold text-gold">Example: Ryanair / Lidl / Ikea</div>
+                    </div>
+
+                    <div onclick="window.inspectDimension(1)" id="dim-card-1" class="rbs-card p-4 cursor-pointer hover:border-gold transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center"><span class="text-xs font-extrabold uppercase text-gold">Dimension 2</span><span class="text-xl">💎</span></div>
+                            <h3 class="text-lg font-bold text-charcoal mt-1">2. Quality</h3>
+                            <p class="text-xs text-gray-700 mt-1">Superior performance specification (luxury) OR zero-defect consistency (conformance).</p>
+                        </div>
+                        <div class="mt-2 text-[11px] font-bold text-charcoal">Example: Ferrari / Rolex / Swiss Pharma</div>
+                    </div>
+
+                    <div onclick="window.inspectDimension(2)" id="dim-card-2" class="rbs-card p-4 cursor-pointer hover:border-gold transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center"><span class="text-xs font-extrabold uppercase text-gold">Dimension 3</span><span class="text-xl">⚡</span></div>
+                            <h3 class="text-lg font-bold text-charcoal mt-1">3. Speed (Time)</h3>
+                            <p class="text-xs text-gray-700 mt-1">Minimizing customer lead time (Flow Time) and delivering reliably on schedule.</p>
+                        </div>
+                        <div class="mt-2 text-[11px] font-bold text-charcoal">Example: Amazon Prime / ER Triage</div>
+                    </div>
+
+                    <div onclick="window.inspectDimension(3)" id="dim-card-3" class="rbs-card p-4 cursor-pointer hover:border-gold transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center"><span class="text-xs font-extrabold uppercase text-gold">Dimension 4</span><span class="text-xl">🎨</span></div>
+                            <h3 class="text-lg font-bold text-charcoal mt-1">4. Flexibility</h3>
+                            <p class="text-xs text-gray-700 mt-1">Ability to customize variety (mass customization) or rapidly scale volume up/down.</p>
+                        </div>
+                        <div class="mt-2 text-[11px] font-bold text-charcoal">Example: Custom Tailoring / Netflix Cloud</div>
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Efficient Frontier Trade-Off Visualizer -->
+                <div class="lg:col-span-6 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-widest text-gold">INTERACTIVE TRADE-OFF SIMULATOR</span>
+                            <div class="flex gap-1.5">
+                                <button onclick="window.setOpsProfile('ryanair')" id="prof-ryanair" class="px-2.5 py-1 bg-gold text-white text-xs font-bold rounded">✈️ Ryanair</button>
+                                <button onclick="window.setOpsProfile('ferrari')" id="prof-ferrari" class="px-2.5 py-1 bg-white/10 text-white text-xs font-bold rounded">🏎️ Ferrari</button>
+                                <button onclick="window.setOpsProfile('amazon')" id="prof-amazon" class="px-2.5 py-1 bg-white/10 text-white text-xs font-bold rounded">📦 Amazon Prime</button>
+                            </div>
+                        </div>
+
+                        <div class="bg-black/30 p-3.5 rounded-xl border border-white/10 space-y-2.5 text-xs">
+                            <div>
+                                <div class="flex justify-between mb-1"><span>💶 Low-Cost Efficiency</span><span id="bar-cost-lbl" class="font-bold text-gold">98%</span></div>
+                                <div class="w-full bg-white/10 h-3 rounded overflow-hidden"><div id="bar-cost" class="bg-gold h-full transition-all duration-300" style="width:98%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1"><span>💎 Luxury / Specification Quality</span><span id="bar-qual-lbl" class="font-bold text-gray-300">35%</span></div>
+                                <div class="w-full bg-white/10 h-3 rounded overflow-hidden"><div id="bar-qual" class="bg-emerald-500 h-full transition-all duration-300" style="width:35%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1"><span>⚡ Turnaround Speed</span><span id="bar-spd-lbl" class="font-bold text-gray-300">90% (25m Gate Turnaround)</span></div>
+                                <div class="w-full bg-white/10 h-3 rounded overflow-hidden"><div id="bar-spd" class="bg-cyan-400 h-full transition-all duration-300" style="width:90%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1"><span>🎨 Customization / Flexibility</span><span id="bar-flex-lbl" class="font-bold text-gray-300">15% (1 Aircraft Type: Boeing 737)</span></div>
+                                <div class="w-full bg-white/10 h-3 rounded overflow-hidden"><div id="bar-flex" class="bg-purple-400 h-full transition-all duration-300" style="width:15%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ops-profile-note" class="mt-3 p-3 rounded-xl bg-white/10 border-l-4 border-gold text-xs text-gray-100 leading-relaxed">
+                        ✈️ <strong>Ryanair's Operational Trade-off:</strong> To achieve €19 tickets (<strong>98% Cost Efficiency</strong>) and 25-minute airport turnarounds (<strong>90% Speed</strong>), Ryanair sacrifices <strong>Flexibility</strong> (flies only one plane model: Boeing 737, zero seat recline, secondary airports).
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 3 [PEDAGOGICAL ANCHOR]: BRIDGING STRATEGY TO REALITY VIA "PIZZERIA DA LORENZO"
+             Now in Slide 3 AFTER the 4 Dimensions, with a clear narrative bridge!
+             ========================================== -->
+        <section id="slide-2" class="slide w-full h-full flex-col justify-center py-1">
+            <!-- Explicit Narrative Bridge Banner so the Professor & Students immediately see the connection -->
+            <div class="mb-2 px-3.5 py-1.5 rounded-xl bg-charcoal text-white flex flex-col sm:flex-row items-center justify-between gap-2 border-l-4 border-gold">
+                <div class="text-xs">
+                    <span class="text-gold font-extrabold uppercase tracking-wider">🔗 The Bridge from Slide 2:</span>
+                    <span>Once an executive chooses their strategy (<strong>Cost, Quality, Speed, or Flexibility</strong>), how do we measure the physical engine on the floor? Let's step inside a busy Roman Pizzeria!</span>
+                </div>
+                <span class="text-[11px] font-bold text-gold shrink-0">Strategy ➔ Shop-Floor Flow</span>
+            </div>
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-2">
+                <div>
+                    <h1 class="text-2xl md:text-4xl font-bold text-gold">The Anchor Case: "Pizzeria da Lorenzo" at 1:00 PM</h1>
+                </div>
+                <span class="text-xs text-charcoal font-medium">Click Steps 1–5 in order to trace how a customer's pizza order creates every metric in this course!</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+                <!-- Left: Visual Pizzeria Floor Map -->
+                <div class="lg:col-span-7 rbs-card-dark p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-widest text-gold">FOLLOW ONE PIZZA FROM DOOR TO TABLE (12:00 – 15:00)</span>
+                            <span class="text-[11px] text-emerald-300 font-semibold">Click 1 ➔ 2 ➔ 3 ➔ 4 ➔ 5</span>
+                        </div>
+
+                        <!-- Interactive Pizzeria Pipeline Cards -->
+                        <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
+                            <div onclick="window.selectPizzaAnchor(0)" id="pizza-st-0" class="p-2.5 rounded-xl bg-gold/25 border-2 border-gold cursor-pointer transition">
+                                <div class="text-lg">🍕</div>
+                                <div class="font-extrabold text-gold mt-0.5">1. The Order</div>
+                                <div class="text-[11px] text-gray-200 mt-0.5">1 Margherita Pizza</div>
+                                <div class="mt-1.5 text-[10px] font-bold px-1.5 py-0.5 bg-gold text-charcoal rounded inline-block">= Flow Unit</div>
+                            </div>
+
+                            <div onclick="window.selectPizzaAnchor(1)" id="pizza-st-1" class="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 cursor-pointer transition">
+                                <div class="text-lg">🔔</div>
+                                <div class="font-extrabold text-white mt-0.5">2. Demand Pace</div>
+                                <div class="text-[11px] text-gray-200 mt-0.5">1 Buyer every 2 mins</div>
+                                <div class="mt-1.5 text-[10px] font-bold px-1.5 py-0.5 bg-white/20 text-cyan-300 rounded inline-block">= Takt Time</div>
+                            </div>
+
+                            <div onclick="window.selectPizzaAnchor(2)" id="pizza-st-2" class="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 cursor-pointer transition">
+                                <div class="text-lg">👥</div>
+                                <div class="font-extrabold text-white mt-0.5">3. The Queue</div>
+                                <div class="text-[11px] text-gray-200 mt-0.5">15 Orders Waiting</div>
+                                <div class="mt-1.5 text-[10px] font-bold px-1.5 py-0.5 bg-white/20 text-amber-300 rounded inline-block">= Inventory (I)</div>
+                            </div>
+
+                            <div onclick="window.selectPizzaAnchor(3)" id="pizza-st-3" class="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 cursor-pointer transition">
+                                <div class="text-lg">🔥</div>
+                                <div class="font-extrabold text-white mt-0.5">4. Wood Oven</div>
+                                <div class="text-[11px] text-gray-200 mt-0.5">Bakes 30 Pizzas/hr</div>
+                                <div class="mt-1.5 text-[10px] font-bold px-1.5 py-0.5 bg-red-500/30 text-red-200 rounded inline-block">= Flow Rate (R)</div>
+                            </div>
+
+                            <div onclick="window.selectPizzaAnchor(4)" id="pizza-st-4" class="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 cursor-pointer transition">
+                                <div class="text-lg">⏱️</div>
+                                <div class="font-extrabold text-white mt-0.5">5. Total Wait</div>
+                                <div class="text-[11px] text-gray-200 mt-0.5">30 Mins Door-to-Table</div>
+                                <div class="mt-1.5 text-[10px] font-bold px-1.5 py-0.5 bg-white/20 text-emerald-300 rounded inline-block">= Flow Time (T)</div>
+                            </div>
+                        </div>
+
+                        <!-- Live explanation of selected station -->
+                        <div id="pizza-anchor-box" class="mt-3 p-3.5 rounded-xl bg-black/40 border-l-4 border-gold text-xs md:text-sm text-gray-100 leading-relaxed">
+                            🍕 <strong>Step 1 — Define the "Flow Unit":</strong> Before you can measure Speed or Cost in any business, you must ask: <strong>"What is the single unit moving through our doors?"</strong> In our pizzeria, it is <strong>1 Pizza Order</strong>. (In a Hospital ER = <em>1 Patient</em>; in a Bank = <em>1 Loan Application</em>).
+                        </div>
+                    </div>
+
+                    <div class="mt-2 pt-2 border-t border-white/10 flex justify-between items-center text-xs text-gray-300">
+                        <span>💡 <strong>Why this matters:</strong> All 5 steps connect into one master equation:</span>
+                        <span class="text-gold font-bold">15 Orders Waiting (I) = 30 Pizzas/hr (R) × 0.5 Hours Wait (T)</span>
+                    </div>
+                </div>
+
+                <!-- Right: Complete Cheat-Sheet Translation Table -->
+                <div class="lg:col-span-5 rbs-card p-4 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-gold mb-1">Your Plain-English Operations Dictionary</h2>
+                        <p class="text-xs text-charcoal mb-2">Whenever a metric sounds technical today, translate it back to these 7 everyday pizzeria questions:</p>
+
+                        <table class="w-full text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-gold text-charcoal font-bold">
+                                    <th class="p-2 text-left">Operations Metric</th>
+                                    <th class="p-2 text-left">Plain-English Question</th>
+                                    <th class="p-2 text-left">Pizzeria Reality</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 text-charcoal">
+                                <tr><td class="p-1.5 font-bold">1. Flow Unit</td><td class="p-1.5">"What item are we tracking?"</td><td class="p-1.5 font-semibold text-gold">1 Pizza Order</td></tr>
+                                <tr class="bg-cream/50"><td class="p-1.5 font-bold">2. Takt Time</td><td class="p-1.5">"How often does a buyer walk in?"</td><td class="p-1.5 font-semibold">1 every 2 mins</td></tr>
+                                <tr><td class="p-1.5 font-bold">3. Inventory (WIP / I)</td><td class="p-1.5">"How many are waiting inside?"</td><td class="p-1.5 font-semibold">15 active orders</td></tr>
+                                <tr class="bg-cream/50"><td class="p-1.5 font-bold">4. Flow Rate (R)</td><td class="p-1.5">"How fast do they exit?"</td><td class="p-1.5 font-semibold">30 pizzas / hour</td></tr>
+                                <tr><td class="p-1.5 font-bold">5. Flow Time (T)</td><td class="p-1.5">"How long from door to table?"</td><td class="p-1.5 font-semibold">30 mins (0.5 hrs)</td></tr>
+                                <tr class="bg-cream/50"><td class="p-1.5 font-bold">6. Bottleneck</td><td class="p-1.5">"Which station limits output?"</td><td class="p-1.5 font-semibold text-red-600">The Wood Oven</td></tr>
+                                <tr><td class="p-1.5 font-bold">7. Muda (Waste)</td><td class="p-1.5">"What won't the buyer pay for?"</td><td class="p-1.5 font-semibold">Walking 50m for basil</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 4 (ORIGINAL SLIDE 2): DEFINING THE MECHANICS: FLOW AND METRICS
+             Upgraded Left Visual: Crystal-clear 4-Stage Pipeline Diagram + Strong Active Highlights!
+             ========================================== -->
+        <section id="slide-3" class="slide w-full h-full flex-col justify-center py-1">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-2">
+                <div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-gold">2. Defining the Mechanics: Flow and Metrics</h1>
+                    <p class="text-xs md:text-sm text-charcoal font-medium">Click any of the 5 Metric Cards on the right to light up where it lives inside the Process Engine!</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 mt-2 md:mt-0">
+                    <button onclick="window.setFlowIndustry('pizza')" id="flow-ind-pizza" class="px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg shadow">🍕 Pizzeria</button>
+                    <button onclick="window.setFlowIndustry('er')" id="flow-ind-er" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🏥 Hospital ER</button>
+                    <button onclick="window.setFlowIndustry('pharma')" id="flow-ind-pharma" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🧬 Pharma Plant</button>
+                    <button onclick="window.setFlowIndustry('loan')" id="flow-ind-loan" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🏦 Loan Startup</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+                <!-- Left Visual: Clear 4-Stage Process Pipeline (Replaces confusing diagonal line SVG) -->
+                <div class="lg:col-span-5 rbs-card-dark p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-gold" id="flow-case-title">ACTIVE CASE: ROMAN PIZZERIA LUNCH RUSH</span>
+                            <span class="text-[10px] text-emerald-300 font-semibold">Interactive Process Map</span>
+                        </div>
+
+                        <!-- Clean, Self-Explanatory Visual Process Box -->
+                        <div class="bg-slate-900 rounded-xl border border-white/15 p-3 space-y-2.5">
+                            <!-- Top Row: Customer Demand Rhythm (Takt Time) & Flow Unit -->
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div id="pipe-box-0" onclick="window.highlightFlowMetric(0)" class="p-2.5 rounded-lg bg-gold/25 border-2 border-gold cursor-pointer transition">
+                                    <div class="text-[10px] uppercase font-bold text-gold">1. Flow Unit (The Item)</div>
+                                    <div id="svg-flow-u" class="text-sm font-extrabold text-white mt-0.5">🍕 1 Pizza Order</div>
+                                </div>
+                                <div id="pipe-box-4" onclick="window.highlightFlowMetric(4)" class="p-2.5 rounded-lg bg-white/5 border border-white/15 cursor-pointer transition">
+                                    <div class="text-[10px] uppercase font-bold text-cyan-300">2. Takt Time (Arrival Pace)</div>
+                                    <div id="svg-flow-takt" class="text-sm font-extrabold text-white mt-0.5">🔔 Every 2 mins</div>
+                                </div>
+                            </div>
+
+                            <!-- Middle Row: Inside the Process Building (Inventory WIP & Flow Rate) -->
+                            <div class="p-2.5 rounded-xl bg-black/50 border border-dashed border-gold/50">
+                                <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1.5 text-center">🏢 INSIDE THE PROCESS BOUNDARY (WAITING + WORKSTATIONS)</div>
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div id="pipe-box-3" onclick="window.highlightFlowMetric(3)" class="p-2 rounded-lg bg-white/5 border border-white/15 cursor-pointer transition">
+                                        <div class="text-[10px] font-bold text-amber-300">3. Inventory (WIP / I)</div>
+                                        <div id="svg-flow-i" class="text-sm font-extrabold text-white">15 Orders Inside</div>
+                                    </div>
+                                    <div id="pipe-box-1" onclick="window.highlightFlowMetric(1)" class="p-2 rounded-lg bg-white/5 border border-white/15 cursor-pointer transition">
+                                        <div class="text-[10px] font-bold text-emerald-300">4. Flow Rate (Throughput R)</div>
+                                        <div id="svg-flow-r" class="text-sm font-extrabold text-white">30 Pizzas / hr</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Bar: Total Stopwatch Span (Flow Time T) -->
+                            <div id="pipe-box-2" onclick="window.highlightFlowMetric(2)" class="p-2 rounded-lg bg-white/5 border border-white/15 cursor-pointer transition flex justify-between items-center text-xs">
+                                <span class="font-bold text-gold">⏱️ 5. Total Stopwatch Span (Flow Time T):</span>
+                                <span id="svg-flow-t" class="font-extrabold text-white">30 Mins (0.5 hrs)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="flow-live-example-box" class="mt-2 p-3 rounded-xl bg-white/10 border-l-4 border-gold text-xs text-gray-100 leading-relaxed">
+                        🍕 <strong>Pizzeria Translation:</strong> Every <strong>Pizza</strong> (Flow Unit) takes <strong>30 mins</strong> (Flow Time) from order to table. We bake <strong>30 pizzas/hr</strong> (Flow Rate), and there are <strong>15 orders</strong> (Inventory) active right now.
+                    </div>
+                </div>
+
+                <!-- Right: The 5 Official Metric Cards from Original Slide 2 with Bold Selection Ring -->
+                <div class="lg:col-span-7 flex flex-col justify-between gap-2.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div onclick="window.highlightFlowMetric(0)" id="fm-card-0" class="rbs-card p-3.5 cursor-pointer border-2 border-gold ring-4 ring-gold/30 bg-goldlight transition">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-base font-bold text-charcoal">1. Flow Unit</h3>
+                                <span id="fm-ex-0" class="text-[11px] font-bold px-2 py-0.5 bg-gold text-white rounded">🍕 1 Pizza Order</span>
+                            </div>
+                            <p class="text-xs text-charcoal mt-1">The basic unit moving through the process (e.g., a customer, a patient, or a liter of beer).</p>
+                        </div>
+
+                        <div onclick="window.highlightFlowMetric(1)" id="fm-card-1" class="rbs-card p-3.5 cursor-pointer hover:border-gold transition">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-base font-bold text-gold">2. Flow Rate (Throughput)</h3>
+                                <span id="fm-ex-1" class="text-[11px] font-bold px-2 py-0.5 bg-cream rounded text-charcoal">🍕 30 Pizzas / hour</span>
+                            </div>
+                            <p class="text-xs text-charcoal mt-1">Number of units exiting the process per unit of time (e.g., per hour or per day).</p>
+                        </div>
+
+                        <div onclick="window.highlightFlowMetric(2)" id="fm-card-2" class="rbs-card p-3.5 cursor-pointer hover:border-gold transition">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-base font-bold text-gold">3. Flow Time</h3>
+                                <span id="fm-ex-2" class="text-[11px] font-bold px-2 py-0.5 bg-cream rounded text-charcoal">🍕 30 Mins (0.5 hrs)</span>
+                            </div>
+                            <p class="text-xs text-charcoal mt-1">Total duration for one unit to travel from entry to exit (Waiting Time + Processing Time).</p>
+                        </div>
+
+                        <div onclick="window.highlightFlowMetric(3)" id="fm-card-3" class="rbs-card p-3.5 cursor-pointer hover:border-gold transition">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-base font-bold text-gold">4. Inventory (WIP)</h3>
+                                <span id="fm-ex-3" class="text-[11px] font-bold px-2 py-0.5 bg-cream rounded text-charcoal">🍕 15 Active Orders</span>
+                            </div>
+                            <p class="text-xs text-charcoal mt-1">The total number of units currently inside the process boundary at any given moment.</p>
+                        </div>
+                    </div>
+
+                    <div onclick="window.highlightFlowMetric(4)" id="fm-card-4" class="rbs-card p-3.5 cursor-pointer hover:border-gold transition">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-base font-bold text-gold">5. Takt Time <span class="text-xs font-normal text-gray-500">(Available Time ÷ Customer Demand)</span></h3>
+                            <span id="fm-ex-4" class="text-[11px] font-bold px-2 py-0.5 bg-cream rounded text-charcoal">🍕 60m ÷ 30 = 2 mins/pizza</span>
+                        </div>
+                        <p class="text-xs text-charcoal mt-1">The heartbeat of customer demand. Production must match this rhythm to avoid queues or waste.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 5 (ORIGINAL SLIDE 3): THE REALITY OF CAPACITY: DESIGN VS. EFFECTIVE
+             ========================================== -->
+        <section id="slide-4" class="slide w-full h-full flex-col justify-center py-1">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-3">
+                <div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-gold">3. The Reality of Capacity: Design vs. Effective</h1>
+                    <p class="text-xs md:text-sm text-charcoal font-medium">Understanding Theoretical Maximums vs. Operational Truths</p>
+                </div>
+                <div class="flex gap-1.5 mt-2 md:mt-0">
+                    <button onclick="window.loadCapacityPreset(100, 82, 74, '👕 Shirt Factory (Slide Example)')" class="px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg">👕 Shirt Factory</button>
+                    <button onclick="window.loadCapacityPreset(60, 48, 42, '🍕 Wood-Fired Pizza Oven')" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🍕 Pizza Oven</button>
+                    <button onclick="window.loadCapacityPreset(120, 90, 85, '✈️ Airline Fleet')" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">✈️ Airline</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Interactive Capacity & Utilization Calculator -->
+                <div class="lg:col-span-6 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-widest text-gold" id="cap-preset-title">👕 SHIRT FACTORY MACHINE TELEMETRY</span>
+                            <span class="text-[11px] text-gray-300">Drag sliders to test</span>
+                        </div>
+
+                        <div class="space-y-3 bg-black/30 p-3.5 rounded-xl border border-white/10 text-xs">
+                            <div>
+                                <div class="flex justify-between font-bold mb-1">
+                                    <span class="text-gold">1. Design Capacity (24/7 Ideal Max):</span>
+                                    <span id="cap-design-val">100 units/hr</span>
+                                </div>
+                                <input type="range" id="cap-design" min="50" max="150" value="100" oninput="window.updateCapacityCalc()">
+                            </div>
+                            <div>
+                                <div class="flex justify-between font-bold mb-1">
+                                    <span class="text-emerald-300">2. Effective Capacity (After breaks/maint.):</span>
+                                    <span id="cap-eff-val">82 units/hr</span>
+                                </div>
+                                <input type="range" id="cap-eff" min="30" max="140" value="82" oninput="window.updateCapacityCalc()">
+                            </div>
+                            <div>
+                                <div class="flex justify-between font-bold mb-1">
+                                    <span class="text-white">3. Actual Output Achieved Today:</span>
+                                    <span id="cap-act-val">74 units/hr</span>
+                                </div>
+                                <input type="range" id="cap-act" min="20" max="130" value="74" oninput="window.updateCapacityCalc()">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 mt-3 text-center">
+                            <div class="p-2.5 rounded-xl bg-gold/20 border border-gold">
+                                <div class="text-[10px] font-bold uppercase text-gold">Utilization (Actual ÷ Design)</div>
+                                <div id="cap-util-res" class="text-2xl font-extrabold text-white mt-0.5">74.0%</div>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-400">
+                                <div class="text-[10px] font-bold uppercase text-emerald-300">Efficiency (Actual ÷ Effective)</div>
+                                <div id="cap-eff-res" class="text-2xl font-extrabold text-white mt-0.5">90.2%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Original Slide 3 Definitions -->
+                <div class="lg:col-span-6 flex flex-col justify-between gap-3">
+                    <div class="rbs-card p-4">
+                        <h3 class="text-xl font-bold text-gold mb-1">Design Capacity</h3>
+                        <p class="text-xs md:text-sm text-charcoal leading-relaxed">
+                            The theoretical maximum output of a system or machine in a given period under ideal conditions (e.g., <strong>100 shirts/hour</strong> if the machine never stops).
+                        </p>
+                    </div>
+
+                    <div class="rbs-card p-4">
+                        <h3 class="text-xl font-bold text-gold mb-1">Effective Capacity</h3>
+                        <p class="text-xs md:text-sm text-charcoal leading-relaxed">
+                            The capacity a firm expects to achieve given its current operating constraints (<strong>lunch breaks, maintenance, setup changeovers, power cuts</strong> — e.g., 82 shirts/hour).
+                        </p>
+                    </div>
+
+                    <div class="bg-gold text-white rounded-xl p-4 shadow-md text-center">
+                        <div class="text-lg md:text-2xl font-extrabold tracking-tight">Utilization = Actual Output / Design Capacity</div>
+                        <div class="text-xs font-semibold text-goldlight mt-1">Syllabus Companion Formula: Efficiency = Actual Output / Effective Capacity</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 6 [NEW SYLLABUS DEEP-DIVE]: PRODUCTIVITY, EFFICIENCY & UTILIZATION
+             ========================================== -->
+        <section id="slide-5" class="slide w-full h-full flex-col justify-center py-1">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-3">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 bg-gold text-white rounded-full">Syllabus Deep-Dive • Pre-Reading Concept</span>
+                    <h1 class="text-3xl md:text-5xl font-bold text-gold mt-1">Productivity vs. Efficiency vs. Utilization</h1>
+                </div>
+                <span class="text-xs text-charcoal font-medium">Why do students confuse these 3 metrics? Let's compare two Baristas in Rome!</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: 3 Clear Cards with Plain-English Analogies -->
+                <div class="lg:col-span-6 space-y-3">
+                    <div class="rbs-card p-4 border-l-8 border-l-gold">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-base font-bold text-charcoal">1. Productivity = Outputs ÷ Inputs</h3>
+                            <span class="px-2 py-0.5 bg-goldlight text-gold font-bold text-xs rounded">Value per Resource</span>
+                        </div>
+                        <p class="text-xs text-gray-700 mt-1">
+                            <strong>Plain English:</strong> How much output do we get per euro of labor, energy, or raw material? <br>
+                            <em>Example:</em> Barista Marco makes <strong>120 cappuccinos in an 8-hour shift</strong> = <strong>15 coffees / labor hour</strong>.
+                        </p>
+                    </div>
+
+                    <div class="rbs-card p-4 border-l-8 border-l-emerald-600">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-base font-bold text-charcoal">2. Efficiency = Actual Output ÷ Effective Capacity</h3>
+                            <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold text-xs rounded">Doing Things Right</span>
+                        </div>
+                        <p class="text-xs text-gray-700 mt-1">
+                            <strong>Plain English:</strong> Given realistic shift conditions (after cleaning &amp; breaks), how well did we perform without waste? <br>
+                            <em>Example:</em> Realistic target is 130 coffees; Marco made 120 without spilling milk = <strong>92.3% Efficiency</strong>.
+                        </p>
+                    </div>
+
+                    <div class="rbs-card p-4 border-l-8 border-l-charcoal">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-base font-bold text-charcoal">3. Utilization = Actual Output ÷ Design Capacity</h3>
+                            <span class="px-2 py-0.5 bg-gray-200 text-charcoal font-bold text-xs rounded">Machine Busyness</span>
+                        </div>
+                        <p class="text-xs text-gray-700 mt-1">
+                            <strong>Plain English:</strong> How much of the espresso machine's theoretical 24/7 maximum capacity did we use? <br>
+                            <em>Warning:</em> <strong>100% Utilization is dangerous!</strong> (Zero buffer for sudden tourist rushes or maintenance!).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right: Interactive "The 100% Utilization Trap" Mini-Case -->
+                <div class="lg:col-span-6 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-bold uppercase tracking-widest text-gold mb-1">INTERACTIVE QUIZ • SPOT THE BETTER MANAGER</div>
+                        <h3 class="text-lg font-bold text-white mb-3">Which Factory Manager deserves the promotion?</h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div onclick="window.testManagerTrap('A')" class="p-3.5 rounded-xl bg-white/10 hover:bg-gold/20 border border-white/15 cursor-pointer transition">
+                                <div class="font-extrabold text-gold text-sm mb-1">👨‍💼 Manager A ("Busy Bob")</div>
+                                <ul class="space-y-1 text-gray-200">
+                                    <li>• Machine Utilization: <strong>99%</strong></li>
+                                    <li>• Skips preventive maintenance</li>
+                                    <li>• Produces 1,000 units (200 defective)</li>
+                                    <li>• Unsold inventory piles up in warehouse</li>
+                                </ul>
+                                <div class="mt-2 font-bold text-gold underline">Click to Evaluate Manager A →</div>
+                            </div>
+
+                            <div onclick="window.testManagerTrap('B')" class="p-3.5 rounded-xl bg-white/10 hover:bg-gold/20 border border-white/15 cursor-pointer transition">
+                                <div class="font-extrabold text-emerald-300 text-sm mb-1">👩‍💼 Manager B ("Lean Elena")</div>
+                                <ul class="space-y-1 text-gray-200">
+                                    <li>• Machine Utilization: <strong>82%</strong></li>
+                                    <li>• Efficiency vs. Effective Cap: <strong>98%</strong></li>
+                                    <li>• Produces 820 units (0 defects, all sold)</li>
+                                    <li>• Matches customer Takt Time</li>
+                                </ul>
+                                <div class="mt-2 font-bold text-emerald-300 underline">Click to Evaluate Manager B →</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mgr-trap-result" class="mt-3 p-3.5 rounded-xl bg-black/40 border-l-4 border-gold text-xs text-gray-100 leading-relaxed">
+                        👆 Click <strong>Manager A</strong> or <strong>Manager B</strong> above to see why chasing 100% Utilization destroys operations!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 7 (ORIGINAL SLIDE 4): LITTLE'S LAW (I = R × T)
+             Upgraded: Clean HTML Typography (Zero LaTeX $ signs!) + Interactive 3-Formula Triangle
+             ========================================== -->
+        <section id="slide-6" class="slide w-full h-full flex-col justify-center py-1">
+            <h1 class="text-3xl md:text-5xl font-bold text-gold mb-1">4. Little's Law</h1>
+            <p class="text-xs md:text-sm text-charcoal mb-3">The Fundamental Relationship of Process Flow — <strong>Click any corner of the triangle on the left to rearrange the formula!</strong></p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Interactive Algebraic Formula Triangle & Process Flow -->
+                <div class="lg:col-span-6 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-widest text-gold">THE 3 WAYS TO USE LITTLE'S LAW</span>
+                            <span class="text-[11px] text-gray-300">Click what a question asks you to find:</span>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 mb-3">
+                            <button onclick="window.setLittlesMode('I')" id="ll-mode-I" class="p-2.5 bg-gold text-white text-xs font-bold rounded-xl shadow text-center transition">
+                                <div class="text-base font-extrabold">I = R × T</div>
+                                <div class="text-[10px] opacity-90 mt-0.5">1. Find Queue (WIP)</div>
+                            </button>
+                            <button onclick="window.setLittlesMode('T')" id="ll-mode-T" class="p-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl text-center transition">
+                                <div class="text-base font-extrabold">T = I ÷ R</div>
+                                <div class="text-[10px] opacity-90 mt-0.5">2. Find Wait Time</div>
+                            </button>
+                            <button onclick="window.setLittlesMode('R')" id="ll-mode-R" class="p-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl text-center transition">
+                                <div class="text-base font-extrabold">R = I ÷ T</div>
+                                <div class="text-[10px] opacity-90 mt-0.5">3. Find Throughput</div>
+                            </button>
+                        </div>
+
+                        <!-- Flow Process Diagram matching Original Slide 4 -->
+                        <div class="bg-black/40 p-3 rounded-xl border border-white/10 mb-3">
+                            <div class="text-[10px] text-gray-400 uppercase font-bold mb-1.5 text-center">► FLOW PROCESS PIPELINE (FROM ENTRY TO EXIT)</div>
+                            <div class="grid grid-cols-4 gap-1.5 text-center text-[11px]">
+                                <div class="p-2 bg-white/5 rounded border border-cyan-400/40">
+                                    <div class="text-cyan-300 font-bold">1. CHECK-IN</div>
+                                    <div class="text-white font-extrabold mt-0.5">Arrival (R)</div>
+                                </div>
+                                <div class="p-2 bg-white/5 rounded border border-amber-400/40">
+                                    <div class="text-amber-300 font-bold">2. WAITING</div>
+                                    <div class="text-white font-extrabold mt-0.5">Queue (I)</div>
+                                </div>
+                                <div class="p-2 bg-white/5 rounded border border-emerald-400/40">
+                                    <div class="text-emerald-300 font-bold">3. CONSULT</div>
+                                    <div class="text-white font-extrabold mt-0.5">Service</div>
+                                </div>
+                                <div class="p-2 bg-white/5 rounded border border-gold/40">
+                                    <div class="text-gold font-bold">4. EXIT</div>
+                                    <div class="text-white font-extrabold mt-0.5">Time (T)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="ll-formula-explain" class="p-3.5 rounded-xl bg-white/10 border-l-4 border-gold text-xs text-gray-100 leading-relaxed">
+                            🔢 <strong>Mode 1 — Finding Inventory (I = R × T):</strong><br>
+                            When you know the arrival rate (<strong>R</strong>) and how long each unit stays inside (<strong>T</strong>), multiply them! <br>
+                            <em>Pizzeria Example:</em> <strong>30 pizzas/hr (R) × 0.5 hours (T) = 15 pizzas inside (I)</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Original Slide 4 Gold Banner & Definitions -->
+                <div class="lg:col-span-6 flex flex-col justify-between gap-4">
+                    <div class="bg-gold text-white rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center">
+                        <div id="ll-big-banner" class="text-5xl md:text-6xl font-extrabold tracking-wider">I = R × T</div>
+                        <div id="ll-sub-banner" class="text-xs md:text-sm font-semibold text-goldlight mt-2">Inventory (WIP) = Flow Rate × Flow Time</div>
+                    </div>
+
+                    <div class="rbs-card p-5 flex-1 flex flex-col justify-center space-y-2.5">
+                        <h3 class="text-xl font-bold text-gold">Inventory = Flow Rate × Flow Time</h3>
+                        <p class="text-xs md:text-sm text-charcoal">
+                            <strong>Inventory (I):</strong> The number of units currently inside the process (WIP).
+                        </p>
+                        <p class="text-xs md:text-sm text-charcoal">
+                            <strong>Flow Rate (R):</strong> The rate at which units arrive and exit the system (Throughput).
+                        </p>
+                        <p class="text-xs md:text-sm text-charcoal">
+                            <strong>Flow Time (T):</strong> The average time a unit spends in the system from start to finish.
+                        </p>
+                        <div class="p-2.5 bg-goldlight border border-gold/40 rounded-lg text-xs text-charcoal font-medium">
+                            ⚠️ <strong>Golden Exam Rule:</strong> Always make sure <strong>R</strong> and <strong>T</strong> use the <strong>SAME time unit</strong> (both in Hours, or both in Days, or both in Minutes)!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 8 (ORIGINAL SLIDE 5): ACTIVITY: LITTLE'S LAW AT WORK
+             Fixed: Does NOT spoil the answer (100 Applications) until revealed!
+             ========================================== -->
+        <section id="slide-7" class="slide w-full h-full flex-col justify-center py-1">
+            <h1 class="text-3xl md:text-5xl font-bold text-gold mb-1">5. Activity: Little's Law at Work</h1>
+            <p class="text-xs md:text-sm text-charcoal mb-3">Testing the Fundamental Relationship in a Real-World Scenario — <strong>Ask the class first, then click to reveal!</strong></p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Interactive Desk Visualizer (Starts un-spoiled!) -->
+                <div class="lg:col-span-5 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-bold uppercase tracking-widest text-gold mb-2">FINTECH UNDERWRITING DESK SIMULATOR</div>
+                        <div class="bg-black/30 p-3.5 rounded-xl border border-white/10 space-y-3 text-xs">
+                            <div>
+                                <div class="flex justify-between font-bold mb-1">
+                                    <span>Flow Rate (R — Applications / Day):</span>
+                                    <span id="loan-r-lbl" class="text-gold">20 / day</span>
+                                </div>
+                                <input type="range" id="loan-r" min="5" max="50" step="5" value="20" oninput="window.updateLoanSim()">
+                            </div>
+                            <div>
+                                <div class="flex justify-between font-bold mb-1">
+                                    <span>Flow Time (T — Days to Process):</span>
+                                    <span id="loan-t-lbl" class="text-gold">5 days</span>
+                                </div>
+                                <input type="range" id="loan-t" min="1" max="15" value="5" oninput="window.updateLoanSim()">
+                            </div>
+                            <div class="pt-2 border-t border-white/15 flex justify-between items-center">
+                                <span class="text-gray-300 font-semibold">Desk WIP Inventory (I = R × T):</span>
+                                <span id="loan-i-res" class="px-2.5 py-1 bg-gold/20 border border-gold text-gold font-extrabold rounded-lg">? (Click Reveal)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="window.toggleLoanFollowUp()" class="mt-3 p-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 cursor-pointer transition text-xs text-gray-200">
+                        <div class="flex justify-between items-center">
+                            <span>💡 <strong>Follow-Up Question for Class:</strong> Once we know <strong>I</strong>, how can the startup cut processing time (<strong>T</strong>) from 5 days down to 2 days <em>without</em> hiring more underwriters?</span>
+                            <span class="px-2 py-0.5 bg-gold text-white font-bold text-[10px] rounded shrink-0 ml-2">Reveal ▾</span>
+                        </div>
+                        <div id="loan-followup-ans" class="hidden mt-2.5 pt-2.5 border-t border-white/15 text-emerald-300 leading-relaxed space-y-1">
+                            <div>✅ <strong>The Math (T = I ÷ R):</strong> Since hiring is frozen, Throughput (<strong>R = 20 apps/day</strong>) is fixed. To cut Wait Time (<strong>T</strong>) from <strong>5 days to 2 days</strong>, we must cap <strong>Inventory (I) = 20 × 2 = 40 applications</strong> (down from 100)!</div>
+                            <div class="text-gray-200">🛠️ <strong>How to do it in reality (Kanban WIP Limit):</strong> Stop dumping all 100 files onto underwriters' desks at once (which causes multitasking &amp; context-switching waste). Cap active desk WIP at <strong>40 files</strong>—only pull a new file in when one is finished (<em>"Stop starting, start finishing!"</em>).</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Original Slide 5 Scenario & Click-to-Reveal Answer -->
+                <div class="lg:col-span-7 flex flex-col justify-between gap-4">
+                    <div class="rbs-card p-5">
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">SCENARIO</span>
+                        <p class="text-base md:text-lg text-charcoal mt-3 leading-relaxed">
+                            A startup processes loan applications. They receive <strong class="text-gold">20 applications per day</strong> (Flow Rate). On average, an application takes <strong class="text-gold">5 days</strong> to process (Flow Time).
+                        </p>
+                        <p class="text-base md:text-lg italic text-charcoal mt-3 font-medium">
+                            Question: How many applications are currently sitting on the team's desks (Inventory/WIP)?
+                        </p>
+                    </div>
+
+                    <!-- Charcoal Reveal Box matching Original Slide 5 -->
+                    <div onclick="window.revealLoanAnswer()" class="rbs-card-dark p-5 cursor-pointer hover:ring-4 hover:ring-gold/50 transition flex flex-col justify-center min-h-[135px]">
+                        <div id="loan-ans-prompt" class="text-center">
+                            <span class="px-4 py-2 bg-gold text-white font-bold text-xs rounded-lg shadow">👆 Click to Reveal Step-by-Step Calculation</span>
+                        </div>
+                        <div id="loan-ans-box" class="hidden space-y-1.5 text-xs md:text-sm">
+                            <div class="text-gold font-extrabold uppercase tracking-wider">✅ STEP-BY-STEP SOLUTION:</div>
+                            <div>1. <strong>Identify Given Metrics:</strong> Flow Rate (<strong>R</strong>) = 20 apps/day | Flow Time (<strong>T</strong>) = 5 days.</div>
+                            <div>2. <strong>Check Time Units:</strong> Both use <em>days</em>! No unit conversion needed.</div>
+                            <div class="text-base font-extrabold text-emerald-300 pt-1">3. Apply Little's Law: I = R × T = 20 × 5 = 100 Applications in WIP Inventory!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 9 (ORIGINAL SLIDE 6): WORKSHOP 1 LAB 1: THE ER TRIAGE CRISIS
+             Upgraded: Clean HTML Math (Zero $ signs), Muda Spoiler framing, and Visual ER Board
+             ========================================== -->
+        <section id="slide-8" class="slide w-full h-full flex-col justify-center py-1">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-3">
+                <div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-gold">Workshop 1 Lab 1: The ER Triage Crisis</h1>
+                    <p class="text-xs md:text-sm text-charcoal">Applying Operations Management Principles to Healthcare Logistics</p>
+                </div>
+                <div class="flex items-center gap-2 mt-2 md:mt-0">
+                    <span id="er-timer-disp" class="px-3 py-1 bg-charcoal text-gold font-mono font-bold text-xs rounded-lg">⏱️ 10:00</span>
+                    <button onclick="window.toggleErTimer()" id="er-timer-btn" class="px-3 py-1 bg-gold text-white text-xs font-bold rounded-lg">▶ Start Breakout Timer</button>
+                    <button onclick="window.resetErSteps()" class="px-2.5 py-1 bg-white border border-charcoal text-charcoal text-xs font-bold rounded-lg">Hide Answers</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Original Slide 6 Scenario Card + Visual Telemetry -->
+                <div class="lg:col-span-5 rbs-card p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">SCENARIO</span>
+                        <div class="space-y-3 text-sm md:text-base text-charcoal mt-4 leading-relaxed">
+                            <p>Saturday night ER Shift (<strong class="text-gold">480 mins</strong>). <strong class="text-gold">40 patients</strong> expected.</p>
+                            <p>Doctors require <strong class="text-gold">30 mins</strong> per patient (Cycle Time). <strong class="text-gold">3 Doctors</strong> on shift.</p>
+                            <p>The Waiting Room has <strong class="text-gold">15 patients</strong> (Inventory).</p>
+                        </div>
+
+                        <!-- Mini Visual Summary of Given Numbers -->
+                        <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+                            <div class="p-2 bg-cream rounded-lg border border-gold/30">
+                                <div class="text-[10px] font-bold text-gray-500 uppercase">Shift Length</div>
+                                <div class="font-extrabold text-charcoal">480m (8 hrs)</div>
+                            </div>
+                            <div class="p-2 bg-cream rounded-lg border border-gold/30">
+                                <div class="text-[10px] font-bold text-gray-500 uppercase">Parallel Docs</div>
+                                <div class="font-extrabold text-charcoal">3 Doctors</div>
+                            </div>
+                            <div class="p-2 bg-cream rounded-lg border border-gold/30">
+                                <div class="text-[10px] font-bold text-gray-500 uppercase">Queue (WIP I)</div>
+                                <div class="font-extrabold text-red-600">15 Patients</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 rounded-xl bg-goldlight border-l-4 border-gold text-xs text-charcoal">
+                        💡 <strong>Guiding Hint for Groups:</strong> First find how many patients <strong>1 Doctor</strong> can treat in 1 hour (60 mins ÷ 30 mins), then multiply by <strong>3 Doctors</strong>!
+                    </div>
+                </div>
+
+                <!-- Right: Original Slide 6 Task Card + Step-by-Step Interactive Solution Reveal -->
+                <div class="lg:col-span-7 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">YOUR TASK (CLICK EACH QUESTION AFTER CLASS DISCUSSION)</span>
+                            <button onclick="window.revealAllErSteps()" class="text-xs text-gold underline font-bold">Reveal All 3</button>
+                        </div>
+
+                        <div class="space-y-3 text-xs md:text-sm">
+                            <!-- Question 1 -->
+                            <div onclick="window.toggleErStep(1)" class="p-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 cursor-pointer transition">
+                                <div class="font-bold text-white flex justify-between items-center">
+                                    <span>1. Calculate the Hospital's Flow Rate.</span>
+                                    <span class="px-2 py-0.5 bg-gold/20 text-gold text-xs rounded">Reveal Step 1 ▾</span>
+                                </div>
+                                <div id="er-step-1" class="hidden mt-2.5 pt-2.5 border-t border-white/10 text-emerald-300 text-xs leading-relaxed space-y-1">
+                                    <div>✅ <strong>Service Capacity (Flow Rate R):</strong> 1 Doctor = 60m ÷ 30m = <strong>2 patients/hr</strong>. With <strong>3 Doctors</strong> = <strong>6 patients/hour</strong> (or 48 patients per 8-hr shift).</div>
+                                    <div>✅ <strong>Customer Demand Rate:</strong> 40 patients ÷ 8 hours = <strong>5 patients/hour</strong> (Takt Time = 480m ÷ 40 = 12 mins/patient).</div>
+                                </div>
+                            </div>
+
+                            <!-- Question 2 -->
+                            <div onclick="window.toggleErStep(2)" class="p-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 cursor-pointer transition">
+                                <div class="font-bold text-white flex justify-between items-center">
+                                    <span>2. Use Little's Law to calculate the Wait Time for a new arrival.</span>
+                                    <span class="px-2 py-0.5 bg-gold/20 text-gold text-xs rounded">Reveal Step 2 ▾</span>
+                                </div>
+                                <div id="er-step-2" class="hidden mt-2.5 pt-2.5 border-t border-white/10 text-emerald-300 text-xs leading-relaxed space-y-1">
+                                    <div>✅ <strong>Rearranging Little's Law (T = I ÷ R):</strong></div>
+                                    <div>• Using Doctor Capacity (<strong>R = 6 patients/hr</strong>): Wait Time <strong>T = 15 ÷ 6 = 2.5 hours (150 minutes)</strong>!</div>
+                                    <div>• (Using Arrival Rate <strong>R = 5 patients/hr</strong>: Wait Time <strong>T = 15 ÷ 5 = 3.0 hours / 180 minutes</strong>).</div>
+                                </div>
+                            </div>
+
+                            <!-- Question 3 -->
+                            <div onclick="window.toggleErStep(3)" class="p-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 cursor-pointer transition">
+                                <div class="font-bold text-white flex justify-between items-center">
+                                    <span>3. Where is the waste? <span class="text-xs font-normal text-amber-300">(Preview of Section 7: Lean &amp; Muda!)</span></span>
+                                    <span class="px-2 py-0.5 bg-gold/20 text-gold text-xs rounded">Reveal Step 3 ▾</span>
+                                </div>
+                                <div id="er-step-3" class="hidden mt-2.5 pt-2.5 border-t border-white/10 text-emerald-300 text-xs leading-relaxed">
+                                    ✅ <strong>Waiting Waste (in Lean we call this "Muda"):</strong> Even though 3 doctors have enough capacity (48 patients) to beat expected demand (40 patients), <strong>15 patients are stuck waiting 2.5+ hours</strong> because patients arrive in unscheduled Saturday-night waves, triage intake is slow, or doctors wait on lab tests!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 10 (ORIGINAL SLIDE 7): BOTTLENECKS & SENSITIVITY ANALYSIS
+             Fixed: Does NOT highlight Step B or show the Sensitivity answers until clicked!
+             ========================================== -->
+        <section id="slide-9" class="slide w-full h-full flex-col justify-center py-1">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-3">
+                <div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-gold">6. Bottlenecks &amp; Sensitivity Analysis</h1>
+                    <p class="text-xs md:text-sm text-charcoal">Optimizing Throughput by Identifying the Limiting Factor — <strong>Ask the class first, then click to reveal!</strong></p>
+                </div>
+                <button onclick="window.resetSlide10()" class="px-3 py-1 bg-white border border-charcoal text-charcoal text-xs font-bold rounded-lg">↺ Reset Reveals</button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Concept Card (Starts Neutral — Click to Reveal Bottleneck!) -->
+                <div class="lg:col-span-6 flex flex-col justify-between gap-3">
+                    <div class="rbs-card p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center">
+                                <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">CONCEPT</span>
+                                <button onclick="window.revealSlide10Bottleneck()" id="s10-bn-btn" class="px-3 py-1 bg-charcoal hover:bg-gold text-white font-bold text-xs rounded-lg transition">🔍 Click to Highlight Bottleneck</button>
+                            </div>
+                            <p class="text-sm md:text-base text-charcoal mt-3 leading-relaxed">
+                                A process is only as fast as its slowest step. That is the <strong class="text-gold">Bottleneck</strong>. It dictates your total system revenue.
+                            </p>
+                            <p class="text-sm md:text-base text-charcoal mt-2 leading-relaxed">
+                                <strong>Class Question:</strong> Look at the 3 steps below. Which step is the Bottleneck, and what is the maximum hourly output of this factory?
+                            </p>
+
+                            <!-- Visual 3-Pipe Diagram (Starts Neutral, Highlights Step B on click!) -->
+                            <div class="mt-3 bg-cream p-3.5 rounded-xl border border-gold/30 flex items-center justify-between gap-2 text-center text-xs">
+                                <div onclick="window.revealSlide10Bottleneck()" class="flex-1 p-2.5 bg-white rounded-lg border border-gray-300 cursor-pointer">
+                                    <div class="font-bold text-charcoal">Step A</div>
+                                    <div class="text-charcoal font-extrabold text-sm mt-0.5">50 u/h</div>
+                                </div>
+                                <span class="font-bold text-gold">➔</span>
+                                <div id="s10-step-b-box" onclick="window.revealSlide10Bottleneck()" class="flex-1 p-2.5 bg-white rounded-lg border border-gray-300 cursor-pointer transition-all">
+                                    <div id="s10-step-b-title" class="font-bold text-charcoal">Step B</div>
+                                    <div id="s10-step-b-val" class="text-charcoal font-extrabold text-sm mt-0.5">20 u/h</div>
+                                </div>
+                                <span class="font-bold text-gold">➔</span>
+                                <div onclick="window.revealSlide10Bottleneck()" class="flex-1 p-2.5 bg-white rounded-lg border border-gray-300 cursor-pointer">
+                                    <div class="font-bold text-charcoal">Step C</div>
+                                    <div class="text-charcoal font-extrabold text-sm mt-0.5">60 u/h</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="s10-bn-answer" class="hidden mt-3 p-3 rounded-xl bg-red-50 border-l-4 border-red-600 text-xs text-charcoal">
+                            🎯 <strong>Answer Revealed:</strong> <strong class="text-red-700">Step B (20 u/h)</strong> is the Bottleneck! Even though Step A can do 50 u/h and Step C can do 60 u/h, total system output is capped at exactly <strong class="text-red-700">20 units/hour</strong>.
+                        </div>
+                    </div>
+
+                    <div class="bg-charcoal text-white rounded-xl p-4 text-center shadow-lg">
+                        <div class="text-base md:text-xl font-extrabold">System Throughput = Min(Capacity of All Steps)</div>
+                    </div>
+                </div>
+
+                <!-- Right: Sensitivity Analysis Card (Answers Hidden Until Clicked!) -->
+                <div class="lg:col-span-6 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">SENSITIVITY ANALYSIS (THE €5,000 QUESTION)</span>
+                        <p class="text-xs text-gray-300 mt-2">Assume each finished unit sells for <strong>€100</strong>. Ask the class what happens in each scenario, then click to reveal:</p>
+
+                        <div class="space-y-3 mt-3">
+                            <!-- Scenario 1: Upgrade Step C -->
+                            <div onclick="window.testBottleneckUpgrade('C')" class="p-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 cursor-pointer transition">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-bold text-white">Scenario 1: Spend €5k to upgrade <span class="text-gold">Step C to 80 u/h</span></span>
+                                    <span class="px-2 py-0.5 bg-gold text-white text-[11px] font-bold rounded">Click to Reveal ▾</span>
+                                </div>
+                                <div id="s10-sens-c" class="hidden mt-2 pt-2 border-t border-white/10 text-sm text-amber-300">
+                                    ❌ <strong>Extra Revenue? ZERO (€0/hr)!</strong> Because Step B still only feeds 20 units/hr into Step C, upgrading Step C from 60 to 80 u/h produces zero extra units!
+                                </div>
+                            </div>
+
+                            <!-- Scenario 2: Upgrade Step B -->
+                            <div onclick="window.testBottleneckUpgrade('B')" class="p-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 cursor-pointer transition">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-bold text-white">Scenario 2: Spend €5k to upgrade <span class="text-gold">Step B to 25 u/h</span></span>
+                                    <span class="px-2 py-0.5 bg-gold text-white text-[11px] font-bold rounded">Click to Reveal ▾</span>
+                                </div>
+                                <div id="s10-sens-b" class="hidden mt-2 pt-2 border-t border-white/10 text-sm text-emerald-300">
+                                    ✅ <strong>Revenue jumps to €2,500/hr (+€500/hr)!</strong> Upgrading the Bottleneck by +5 u/h immediately increases total plant output from 20 to 25 u/h. Pays for itself in <strong>10 hours</strong>!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="bn-sim-result" class="mt-3 p-3 rounded-xl bg-black/40 border-l-4 border-gold text-xs text-gray-200">
+                        💡 <strong>Goldratt's Law:</strong> <em>"An hour saved at a non-bottleneck is a mirage."</em> Always run Sensitivity Analysis on the Bottleneck first!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 11 (ORIGINAL SLIDE 8): WORKSHOP 2 LAB 2: THE €5M PHARMA TRAP
+             Fixed: Removed "Slowest!" spoiler badge & baseline math spoiler!
+             ========================================== -->
+        <section id="slide-10" class="slide w-full h-full flex-col justify-center py-1">
+            <h1 class="text-3xl md:text-5xl font-bold text-gold mb-1">Workshop 2 Lab 2: The €5M Pharma Trap</h1>
+            <p class="text-xs md:text-sm text-charcoal mb-3">Identifying and Breaking the Bottleneck in Biologics Production</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Original Slide 8 Scenario Card (Zero Spoilers!) -->
+                <div class="lg:col-span-6 rbs-card p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">SCENARIO</span>
+                        <p class="text-sm md:text-base text-charcoal mt-3">Biologics plant. Profit: <strong class="text-gold">€50k / Liter</strong></p>
+                        <h3 class="font-bold text-sm md:text-base text-charcoal mt-3">Current Production Steps:</h3>
+                        <ul class="list-disc list-inside space-y-2 text-sm md:text-base text-charcoal mt-1.5">
+                            <li>Step 1: Synthesis (<strong class="text-gold">100 L/d</strong>)</li>
+                            <li>Step 2: Purification (<strong class="text-gold">40 L/d</strong>)</li>
+                            <li>Step 3: Packaging (<strong class="text-gold">80 L/d</strong>)</li>
+                        </ul>
+                        <p class="italic text-sm md:text-base text-charcoal mt-4">
+                            The Crisis: The CEO gives you <strong>€5 Million</strong> to upgrade.
+                        </p>
+                    </div>
+
+                    <div class="p-3 bg-cream rounded-xl border border-gold/30 text-xs text-charcoal">
+                        💬 <strong>Discussion Prompt for Groups:</strong> Before choosing Option A or B, calculate the plant's <strong>current daily output (Liters/day)</strong> and <strong>current daily profit (€/day)</strong>!
+                    </div>
+                </div>
+
+                <!-- Right: Original Slide 8 Task Card + Interactive ROI Calculator -->
+                <div class="lg:col-span-6 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">YOUR TASK</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">Which upgrade do you choose?</h3>
+
+                        <div class="space-y-2.5">
+                            <button onclick="window.evaluatePharmaLab('A')" class="w-full text-left p-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition">
+                                <div class="text-sm md:text-base font-bold text-white">Option A: Upgrade <span class="text-gold">Step 1 to 150 L/d</span></div>
+                                <div class="text-xs text-gray-300 mt-0.5">Click after class vote to reveal daily profit impact →</div>
+                            </button>
+
+                            <button onclick="window.evaluatePharmaLab('B')" class="w-full text-left p-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition">
+                                <div class="text-sm md:text-base font-bold text-white">Option B: Upgrade <span class="text-gold">Step 2 to 80 L/d</span></div>
+                                <div class="text-xs text-gray-300 mt-0.5">Click after class vote to reveal daily profit impact →</div>
+                            </button>
+                        </div>
+
+                        <p class="text-xs text-gray-300 mt-3">Defend your answer using daily profit calculations.</p>
+                    </div>
+
+                    <div id="pharma-lab-result" class="mt-3 p-3.5 rounded-xl bg-black/40 border-l-4 border-gold text-xs text-gray-100 leading-relaxed">
+                        👆 Ask groups to vote for <strong>Option A</strong> or <strong>Option B</strong> and defend their math, then click either option above!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 12 (ORIGINAL SLIDE 9): THE STORY OF LEAN & ELIMINATING MUDA
+             ========================================== -->
+        <section id="slide-11" class="slide w-full h-full flex-col justify-center py-1">
+            <h1 class="text-3xl md:text-5xl font-bold text-gold mb-1">7. The Story of Lean &amp; Eliminating Muda</h1>
+            <p class="text-xs md:text-sm text-charcoal mb-3">Optimizing Value by Removing Non-Value-Added Activities (Taiichi Ohno &amp; Toyota Production System)</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Original Slide 9 Toyota Legacy Card -->
+                <div class="lg:col-span-5 rbs-card p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">THE TOYOTA LEGACY</span>
+                        <div class="space-y-3 text-xs md:text-sm text-charcoal mt-3 leading-relaxed">
+                            <p>Post-WWII, <strong class="text-gold">Toyota</strong> lacked the cash of Ford or GM. They couldn't afford warehouses of inventory.</p>
+                            <p>They invented <strong class="text-gold">Lean</strong>: a relentless obsession with eliminating <strong class="text-gold">Muda</strong> (waste).</p>
+                            <p>Manager's Goal: Map the <strong class="text-gold">Value Stream</strong> and cut anything the customer won't pay for.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-goldlight border-l-4 border-gold text-xs text-charcoal">
+                        <strong>The Customer Acid Test:</strong> <em>"If the customer saw us doing this step, would they happily pay extra for it?"</em> If NO ➔ It is <strong>Muda</strong>!
+                    </div>
+                </div>
+
+                <!-- Right: Definition + Interactive TIMWOODS 8 Wastes Explorer -->
+                <div class="lg:col-span-7 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">DEFINITION &amp; "TIMWOODS" 8 WASTES EXPLORER</span>
+                            <span class="text-[11px] text-gray-300">Click any letter to see real examples</span>
+                        </div>
+
+                        <p class="text-xs md:text-sm text-white bg-white/10 p-2.5 rounded-lg mb-3">
+                            <strong class="text-gold">Muda</strong> is waste: waiting for emails, over-production, or extra steps to find a tool.
+                        </p>
+
+                        <!-- Interactive TIMWOODS Grid -->
+                        <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5 text-center text-xs mb-3">
+                            <button onclick="window.selectMuda(0)" id="muda-btn-0" class="p-2 rounded-lg bg-gold text-white font-extrabold">T<div class="text-[9px] font-normal">Transport</div></button>
+                            <button onclick="window.selectMuda(1)" id="muda-btn-1" class="p-2 rounded-lg bg-white/10 text-white font-extrabold hover:bg-white/20">I<div class="text-[9px] font-normal">Inventory</div></button>
+                            <button onclick="window.selectMuda(2)" id="muda-btn-2" class="p-2 rounded-lg bg-white/10 text-white font-extrabold hover:bg-white/20">M<div class="text-[9px] font-normal">Motion</div></button>
+                            <button onclick="window.selectMuda(3)" id="muda-btn-3" class="p-2 rounded-lg bg-white/10 text-white font-extrabold hover:bg-white/20">W<div class="text-[9px] font-normal">Waiting</div></button>
+                            <button onclick="window.selectMuda(4)" id="muda-btn-4" class="p-2 rounded-lg bg-white/10 text-white font-extrabold hover:bg-white/20">O<div class="text-[9px] font-normal">Overprod.</div></button>
+                            <button onclick="window.selectMuda(5)" id="muda-btn-5" class="p-2 rounded-lg bg-white/10 text-white font-extrabold hover:bg-white/20">O<div class="text-[9px] font-normal">Overproc.</div></button>
+                            <button onclick="window.selectMuda(6)" id="muda-btn-6" class="p-2 rounded-lg bg-white/10 text-white font-extrabold hover:bg-white/20">D<div class="text-[9px] font-normal">Defects</div></button>
+                            <button onclick="window.selectMuda(7)" id="muda-btn-7" class="p-2 rounded-lg bg-white/10 text-white font-extrabold hover:bg-white/20">S<div class="text-[9px] font-normal">Skills</div></button>
+                        </div>
+
+                        <div id="muda-detail-box" class="p-3 rounded-xl bg-black/40 border-l-4 border-gold text-xs text-gray-100 leading-relaxed">
+                            🚚 <strong>T — Transportation Muda:</strong> Moving products, materials, or files unnecessarily between distant rooms (e.g., slicing bread 50 meters away from the meat fridge in Airline Catering).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 13 (ORIGINAL SLIDE 10): MUDA IN REALITY: CASE STUDIES
+             Fixed: Solutions are hidden behind a click-to-reveal so you can ask the class first!
+             ========================================== -->
+        <section id="slide-12" class="slide w-full h-full flex-col justify-center py-1">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-3">
+                <div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-gold">Muda in Reality: Case Studies</h1>
+                    <p class="text-xs md:text-sm text-charcoal">Identifying and Solving Waste in Diverse Industries — <strong>Ask students how to fix each waste, then click to reveal!</strong></p>
+                </div>
+                <button onclick="window.toggleMudaBeforeAfter()" id="muda-sim-btn" class="px-3.5 py-1.5 bg-gold hover:bg-goldhover text-white text-xs font-bold rounded-lg shadow transition">
+                    ✨ Reveal Both Lean Solutions &amp; Impact
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Food Industry Card matching Original Slide 10 -->
+                <div class="lg:col-span-6 rbs-card p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">FOOD INDUSTRY</span>
+                        <h2 class="text-xl font-bold text-gold mt-3">Airline Catering</h2>
+                        <p class="text-sm md:text-base text-charcoal mt-2 leading-relaxed">
+                            <strong>Transportation Muda:</strong> Slicing bread 50 meters away from the meat fridge.
+                        </p>
+                        <div class="mt-3 flex items-center gap-2">
+                            <strong class="text-gold text-sm md:text-base">Solution:</strong>
+                            <button id="food-sol-badge" onclick="window.toggleMudaBeforeAfter()" class="px-3 py-1 bg-cream hover:bg-gold hover:text-white border border-gold text-charcoal text-xs font-bold rounded-lg transition">
+                                👆 Click to Reveal Lean Solution
+                            </button>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-cream rounded-xl border border-gold/30">
+                            <div class="flex justify-between text-xs font-bold text-charcoal mb-1">
+                                <span>Walking Distance per 1,000 Sandwiches:</span>
+                                <span id="food-muda-stat" class="text-red-600">Current Waste: 5.0 km walked/shift</span>
+                            </div>
+                            <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                                <div id="food-muda-bar" class="bg-red-500 h-full transition-all duration-500" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Pharma Industry Card matching Original Slide 10 -->
+                <div class="lg:col-span-6 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">PHARMA INDUSTRY</span>
+                        <h2 class="text-xl font-bold text-gold mt-3">Biologics Production</h2>
+                        <p class="text-sm md:text-base text-gray-100 mt-2 leading-relaxed">
+                            <strong>Waiting Muda:</strong> A €2M batch sits in a freezer for 14 days waiting for a paper log signature.
+                        </p>
+                        <div class="mt-3 flex items-center gap-2">
+                            <strong class="text-gold text-sm md:text-base">Solution:</strong>
+                            <button id="pharma-sol-badge" onclick="window.toggleMudaBeforeAfter()" class="px-3 py-1 bg-white/15 hover:bg-gold text-white border border-gold text-xs font-bold rounded-lg transition">
+                                👆 Click to Reveal Lean Solution
+                            </button>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-black/30 rounded-xl border border-white/10">
+                            <div class="flex justify-between text-xs font-bold text-gray-200 mb-1">
+                                <span>Batch QA Release Flow Time (T):</span>
+                                <span id="pharma-muda-stat" class="text-red-400">Current Waste: 14 Days Frozen WIP (€2M locked)</span>
+                            </div>
+                            <div class="w-full bg-white/10 h-2.5 rounded-full overflow-hidden">
+                                <div id="pharma-muda-bar" class="bg-red-500 h-full transition-all duration-500" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 14 (ORIGINAL SLIDE 11): 8. THE MEASUREMENT ILLUSION
+             Lagging (Rearview Mirror) vs. Leading (Windshield) Indicators
+             ========================================== -->
+        <section id="slide-13" class="slide w-full h-full flex-col justify-center py-1">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-3">
+                <div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-gold">8. The Measurement Illusion</h1>
+                    <p class="text-xs md:text-sm text-charcoal">Understanding Lagging vs. Leading Indicators — <strong>Switch industries on the right to see real examples!</strong></p>
+                </div>
+                <div class="flex gap-1.5 mt-2 md:mt-0">
+                    <button onclick="window.setIllusionCase('bakery')" id="ill-btn-bakery" class="px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg">🥖 Commercial Bakery</button>
+                    <button onclick="window.setIllusionCase('social')" id="ill-btn-social" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">📱 Social Media Campaign</button>
+                    <button onclick="window.setIllusionCase('pizzeria')" id="ill-btn-pizzeria" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🍕 Roman Pizzeria</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Lagging Indicators Card matching Original Slide 11 -->
+                <div class="lg:col-span-6 rbs-card p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">LAGGING INDICATORS</span>
+                        <h2 class="text-2xl font-bold text-gold mt-3">The Rearview Mirror</h2>
+                        <p class="text-sm md:text-base text-charcoal mt-2 leading-relaxed">
+                            <strong>Financial Metrics:</strong> Net Profit and EBITDA.
+                        </p>
+                        <p class="text-sm md:text-base text-charcoal mt-2 leading-relaxed">
+                            They tell you what <strong>already happened</strong>. You cannot directly command or change them on the shop floor today.
+                        </p>
+
+                        <div id="ill-lagging-ex" class="mt-4 p-3.5 rounded-xl bg-cream border-l-4 border-gold text-xs md:text-sm text-charcoal">
+                            🥖 <strong>Bakery Lagging Outcome:</strong> Quarterly Net Profit Margin (+2% Goal) &amp; Monthly Flour COGS.
+                        </div>
+                    </div>
+
+                    <div class="mt-3 pt-2 border-t border-gray-200 flex justify-between items-center text-xs text-gray-500">
+                        <span>Role in Executive P&amp;L:</span>
+                        <span class="font-bold text-charcoal">The Real Outcome (Result of Inputs)</span>
+                    </div>
+                </div>
+
+                <!-- Right: Leading Indicators Card matching Original Slide 11 -->
+                <div class="lg:col-span-6 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">LEADING INDICATORS</span>
+                        <h2 class="text-2xl font-bold text-gold mt-3">The Windshield</h2>
+                        <p class="text-sm md:text-base text-gray-100 mt-2 leading-relaxed">
+                            <strong>Operational Metrics:</strong> Cycle Time and Defect Rate.
+                        </p>
+                        <p class="text-sm md:text-base text-gray-100 mt-2 leading-relaxed">
+                            They tell you <strong>where the car is going</strong> before you crash. Operators can directly control and adjust these every hour!
+                        </p>
+
+                        <div id="ill-leading-ex" class="mt-4 p-3.5 rounded-xl bg-white/10 border-l-4 border-emerald-400 text-xs md:text-sm text-emerald-200">
+                            🥖 <strong>Bakery Leading Input:</strong> Dough-cutter blade calibration every 2 hrs &amp; loaf weight variance (&lt; 2g overweight).
+                        </div>
+                    </div>
+
+                    <div class="mt-3 pt-2 border-t border-white/15 flex justify-between items-center text-xs text-gray-300">
+                        <span>Formula Connection:</span>
+                        <span class="font-bold text-gold">Controllable Input (Leading) ➔ Real Outcome (Lagging)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 15 (ORIGINAL SLIDE 12): 8. OPERATIONAL PERFORMANCE MEASUREMENT (KPI TREES)
+             ========================================== -->
+        <section id="slide-14" class="slide w-full h-full flex-col justify-center py-1">
+            <h1 class="text-3xl md:text-5xl font-bold text-gold mb-1">8. Operational Performance Measurement</h1>
+            <p class="text-xs md:text-sm text-charcoal mb-3">Connecting Daily Tasks to Strategic Goals via KPI Trees — <strong>Click any node in the KPI Tree on the right to trace the link!</strong></p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Original Slide 12 Text Card -->
+                <div class="lg:col-span-5 rbs-card p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">THE KPI TREE METHOD</span>
+                        <div class="space-y-3 text-xs md:text-sm text-charcoal mt-3 leading-relaxed">
+                            <p>
+                                KPI Trees provide a visual map of how a <strong class="text-gold">Strategic Goal</strong> (e.g., Profit Margin) breaks down into operational levers.
+                            </p>
+                            <p>
+                                By tracing the tree, floor operators understand how reducing <strong class="text-gold">Machine Setup Time</strong> contributes directly to the CEO's vision.
+                            </p>
+                            <p>
+                                This ensures that <strong class="text-gold">Lean improvements</strong> are measurable and aligned with the company's value proposition.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="kpi-tree-node-info" class="mt-3 p-3.5 rounded-xl bg-charcoal text-white border-l-4 border-gold text-xs leading-relaxed">
+                        👆 <strong>Interactive KPI Tree:</strong> Click any box in the tree on the right (e.g., <em>Machine Setup Time</em> or <em>Dough Scrap %</em>) to see how shop-floor Leading Indicators drive CEO Profit!
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Visual KPI Tree Diagram matching Original Slide 12 -->
+                <div class="lg:col-span-7 rbs-card p-5 bg-white flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">VISUALIZATION (CLICK ANY NODE)</span>
+                            <span class="text-[11px] font-bold text-gray-500">Top = Lagging Financial | Bottom = Leading Operational</span>
+                        </div>
+
+                        <!-- Interactive Hierarchy Tree -->
+                        <div class="bg-cream/60 rounded-xl p-3.5 border border-gold/30 space-y-3 text-center text-xs">
+                            <!-- Level 1: Root Strategic Goal -->
+                            <div class="flex justify-center">
+                                <button onclick="window.selectTreeBranch('profit')" class="px-6 py-2 bg-charcoal hover:bg-gold text-white font-extrabold rounded-xl shadow border-2 border-gold transition">
+                                    🏆 Profit Margin (CEO Strategic Goal)
+                                </button>
+                            </div>
+
+                            <div class="text-gold font-bold text-xs">▲ Driven By (Revenue − Costs) ▲</div>
+
+                            <!-- Level 2: Financial Branches -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <button onclick="window.selectTreeBranch('rev')" class="p-2 bg-white hover:bg-goldlight border-2 border-gold/60 rounded-lg font-bold text-charcoal transition">
+                                    📈 Revenue (Units Sold × Price)
+                                </button>
+                                <button onclick="window.selectTreeBranch('cogs')" class="p-2 bg-white hover:bg-goldlight border-2 border-gold/60 rounded-lg font-bold text-charcoal transition">
+                                    💶 Cost of Goods Sold (Materials + Labor)
+                                </button>
+                            </div>
+
+                            <div class="text-gold font-bold text-xs">▲ Controlled Daily By Shop-Floor Leading Levers ▲</div>
+
+                            <!-- Level 3: Shop-Floor Leading Levers -->
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button onclick="window.selectTreeBranch('setup')" class="p-2 bg-goldlight hover:bg-gold hover:text-white border border-gold rounded-lg font-bold text-charcoal transition">
+                                    🔧 Machine Setup Time
+                                </button>
+                                <button onclick="window.selectTreeBranch('availability')" class="p-2 bg-goldlight hover:bg-gold hover:text-white border border-gold rounded-lg font-bold text-charcoal transition">
+                                    🛒 On-Shelf Availability
+                                </button>
+                                <button onclick="window.selectTreeBranch('scrap')" class="p-2 bg-goldlight hover:bg-gold hover:text-white border border-gold rounded-lg font-bold text-charcoal transition">
+                                    🎯 Raw Material Scrap %
+                                </button>
+                                <button onclick="window.selectTreeBranch('overtime')" class="p-2 bg-goldlight hover:bg-gold hover:text-white border border-gold rounded-lg font-bold text-charcoal transition">
+                                    ⏱️ Overtime Labor Hrs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 16 (ORIGINAL SLIDE 13): WORKSHOP 3 LAB 3: THE KPI TREE SIMULATOR
+             Fixed: Starts in Discussion Mode with answers hidden! Click to unlock Simulator & Model Answer!
+             ========================================== -->
+        <section id="slide-15" class="slide w-full h-full flex-col justify-center py-1">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-2">
+                <div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-gold">WORKSHOP 3 LAB 3: THE KPI TREE SIMULATOR</h1>
+                    <p class="text-xs md:text-sm text-charcoal">Translating Financial Mandates into Operational Actions</p>
+                </div>
+                <button onclick="window.toggleBakeryReveal()" id="bakery-reveal-btn" class="px-4 py-1.5 bg-gold hover:bg-goldhover text-white font-bold text-xs rounded-lg shadow transition">
+                    🔓 Unlock Dough-Cutter Simulator &amp; Model Solution
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                <!-- Left: Original Slide 13 Scenario Card -->
+                <div class="lg:col-span-5 rbs-card p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">SCENARIO</span>
+                        <h2 class="text-xl font-bold text-gold mt-3">The Commercial Bakery</h2>
+                        <ul class="space-y-2 text-sm md:text-base text-charcoal mt-2">
+                            <li>• Production: <strong>100k loaves/day</strong></li>
+                            <li>• Margins: <strong>Extremely thin</strong></li>
+                            <li>• CEO Mandate: <strong class="text-gold">+2% Net Profit Margin</strong></li>
+                        </ul>
+
+                        <div class="mt-4 p-3 rounded-xl bg-cream border-l-4 border-gold text-xs text-charcoal leading-relaxed">
+                            💬 <strong>Step 1 — Ask the Class:</strong> <em>"If you walk onto the bakery floor and yell 'Hey dough-cutter operator, increase Net Profit Margin by +2% today!', why will they stare at you blankly?"</em>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Original Slide 13 Task Card (Starts in Discussion Mode; Unlocks Simulator on Click!) -->
+                <div class="lg:col-span-7 rbs-card-dark p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">YOUR TASK</span>
+                        <h3 class="text-xl font-bold text-gold mt-2">Map the Tree</h3>
+                        <p class="text-sm md:text-base text-gray-100 mt-1 leading-relaxed">
+                            How do you translate the financial mandate into a specific, daily action for the <strong>dough-cutting machine operator</strong>?
+                        </p>
+                        <p class="text-xs md:text-sm italic text-gray-300 mt-1">
+                            Identify the leading indicator that connects floor performance to net profit.
+                        </p>
+
+                        <!-- PHASE 1: CLASSROOM DISCUSSION PROMPTS (Shown by default so answer is NOT spoiled!) -->
+                        <div id="bakery-discussion-panel" class="mt-4 p-4 rounded-xl bg-white/10 border border-gold/40 space-y-2.5 text-xs">
+                            <div class="font-extrabold text-gold uppercase tracking-wider">🧠 3 Guiding Questions for Group Brainstorming:</div>
+                            <div>1. <strong>Tree Level 2 (Financial Branch):</strong> Does the dough-cutter operator control <em>Revenue (Bread Price)</em> or <em>Cost of Goods Sold (Raw Flour Cost)</em>?</div>
+                            <div>2. <strong>Tree Level 3 (Physical Waste):</strong> What happens to flour costs if a 500g loaf is accidentally cut at 515g across 100,000 loaves/day? Or if the blade jams?</div>
+                            <div>3. <strong>Leading Indicator (The Windshield):</strong> What physical number should be displayed on the screen right above the dough-cutting machine?</div>
+                            <div class="pt-2">
+                                <button onclick="window.toggleBakeryReveal()" class="w-full py-2 bg-gold hover:bg-goldhover text-white font-bold rounded-lg shadow transition">
+                                    🔓 Click After Discussion to Reveal KPI Tree &amp; Live Dough Simulator
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- PHASE 2: REVEALED SIMULATOR & MODEL ANSWER (Hidden until clicked!) -->
+                        <div id="bakery-revealed-panel" class="hidden mt-3 space-y-2.5 text-xs">
+                            <div class="bg-black/30 p-3.5 rounded-xl border border-gold/50 space-y-2.5">
+                                <div>
+                                    <div class="flex justify-between font-bold mb-1">
+                                        <span class="text-gold">Operator Leading Lever — Loaf Cut Weight (Target: 500g):</span>
+                                        <span id="bakery-wt-lbl" class="text-white">515g/loaf (3.0% Over-weight Waste)</span>
+                                    </div>
+                                    <input type="range" id="bakery-wt" min="500" max="520" value="515" oninput="window.updateBakerySim()">
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-2 text-center pt-1">
+                                    <div class="p-2 bg-white/5 rounded-lg">
+                                        <div class="text-[10px] text-gray-400">Daily Flour Saved</div>
+                                        <div id="bakery-flour" class="text-sm font-extrabold text-emerald-300">0 kg / day</div>
+                                    </div>
+                                    <div class="p-2 bg-white/5 rounded-lg">
+                                        <div class="text-[10px] text-gray-400">Daily COGS Saved</div>
+                                        <div id="bakery-cogs" class="text-sm font-extrabold text-gold">€0 / day</div>
+                                    </div>
+                                    <div class="p-2 bg-white/5 rounded-lg">
+                                        <div class="text-[10px] text-gray-400">Net Profit Margin Lift</div>
+                                        <div id="bakery-margin" class="text-sm font-extrabold text-white">+0.0%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-2.5 rounded-xl bg-emerald-950/60 border-l-4 border-emerald-400 text-gray-100">
+                                ✅ <strong>Model KPI Tree Answer:</strong> Calibrate blade every 2 hrs &amp; reduce Setup Time (<em>Action</em>) ➔ Keep Cut Weight Accuracy at 500g ± 1g &amp; Dough Scrap Rate &lt; 0.5% (<em>Leading Indicator</em>) ➔ Save 1,500 kg of flour/day (<em>COGS</em>) ➔ <strong>+2.25% Net Profit Margin (Lagging Goal)!</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 17 (ORIGINAL SLIDE 14): THANK YOU & Q&A
+             Now a real slide reached directly with the Next → button!
+             ========================================== -->
+        <section id="slide-16" class="slide w-full h-full flex-col items-center justify-center text-center py-1">
+            <h1 class="text-5xl md:text-7xl font-bold text-gold mb-3">Thank You!</h1>
+            <p class="text-xl md:text-2xl text-charcoal mb-4">Do you have any questions?</p>
+            <div class="w-36 h-1 bg-gold rounded-full mb-5"></div>
+
+            <div class="rbs-card p-5 max-w-4xl w-full text-left grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+                <div class="p-3 bg-cream rounded-lg">
+                    <div class="font-bold text-gold uppercase mb-1">1. Flow &amp; Little's Law</div>
+                    <p class="text-charcoal"><strong>I = R × T</strong> (and <strong>T = I ÷ R</strong>). Match customer <strong>Takt Time</strong> and plan around realistic <strong>Effective Capacity</strong>.</p>
+                </div>
+                <div class="p-3 bg-cream rounded-lg">
+                    <div class="font-bold text-gold uppercase mb-1">2. Bottlenecks</div>
+                    <p class="text-charcoal"><strong>Throughput = Min(All Steps)</strong>. Upgrading a non-bottleneck yields zero return; always invest at the constraint.</p>
+                </div>
+                <div class="p-3 bg-cream rounded-lg">
+                    <div class="font-bold text-gold uppercase mb-1">3. Lean &amp; Muda</div>
+                    <p class="text-charcoal">Map the <strong>Value Stream</strong> and eliminate the 8 wastes (<strong>TIMWOODS</strong>) via U-Shaped Cells and Digital QA.</p>
+                </div>
+                <div class="p-3 bg-cream rounded-lg">
+                    <div class="font-bold text-gold uppercase mb-1">4. KPI Trees</div>
+                    <p class="text-charcoal">Connect <strong>Lagging</strong> financial goals (Rearview Mirror) to controllable <strong>Leading</strong> shop-floor levers (Windshield).</p>
+                </div>
+            </div>
+
+            <div class="mt-5 flex gap-3">
+                <button onclick="window.jumpToSlide(0)" class="px-5 py-2 bg-charcoal hover:bg-black text-white text-xs font-bold rounded-lg transition">↺ Restart Presentation</button>
+                <button onclick="window.toggleSlideGrid()" class="px-5 py-2 bg-gold hover:bg-goldhover text-white text-xs font-bold rounded-lg transition">⊞ View All 17 Slides</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==========================================
+         ON-SLIDE EXECUTIVE FOOTER RIBBON (PERMANENT QUOTE + LIVE TOOL)
+         ========================================== -->
+    <div class="w-full max-w-7xl mx-auto px-6 md:px-8 mb-1 shrink-0 z-10">
+        <div class="bg-white/90 border border-gold/40 rounded-xl px-4 py-1.5 flex flex-col md:flex-row items-center justify-between gap-2 text-xs shadow-sm">
+            <div class="flex items-center gap-2 truncate max-w-full md:max-w-[68%]">
+                <span class="px-2 py-0.5 bg-gold/15 text-gold font-extrabold rounded text-[10px] uppercase shrink-0">📖 Quote &amp; Citation</span>
+                <span id="ribbon-quote-text" class="italic text-charcoal truncate">"Matching supply with demand is the heart of operations management." — Cachon &amp; Terwiesch (4th Ed.)</span>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="text-[11px] text-gray-500 hidden sm:inline">Industry Tool:</span>
+                <button onclick="window.openEnrichment('tool')" class="px-2.5 py-0.5 bg-charcoal hover:bg-gold text-white font-bold rounded-md text-[11px] transition flex items-center gap-1">
+                    <span>🛠️</span><span id="ribbon-tool-name">SAP S/4HANA &amp; Celonis</span><span class="text-[10px] opacity-75">(Inspect UI ↗)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         BOTTOM NAVIGATION & BRANDED FOOTER
+         ========================================== -->
+    <footer class="w-full px-6 md:px-8 py-2 bg-white/85 backdrop-blur border-t border-gold/30 flex flex-col sm:flex-row justify-between items-center gap-2 shrink-0 z-20">
+        <div class="flex items-center gap-3">
+            <select id="slide-Select" onchange="window.jumpToSlide(parseInt(this.value))" class="bg-cream border border-gold/50 text-charcoal text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none">
+                <option value="0">1. Title &amp; Lesson 2 Overview</option>
+                <option value="1">2. [Syllabus] 1. Four Dimensions of Operations</option>
+                <option value="2">3. [Use-Case Bridge] Roman Pizzeria Anchor</option>
+                <option value="3">4. 2. Defining Mechanics: Flow &amp; Metrics</option>
+                <option value="4">5. 3. Reality of Capacity: Design vs Effective</option>
+                <option value="5">6. [Syllabus] Productivity vs Efficiency</option>
+                <option value="6">7. 4. Little's Law (I = R × T)</option>
+                <option value="7">8. 5. Activity: Little's Law at Work</option>
+                <option value="8">9. Workshop 1 Lab 1: ER Triage Crisis</option>
+                <option value="9">10. 6. Bottlenecks &amp; Sensitivity Analysis</option>
+                <option value="10">11. Workshop 2 Lab 2: €5M Pharma Trap</option>
+                <option value="11">12. 7. Story of Lean &amp; Eliminating Muda</option>
+                <option value="12">13. Muda in Reality: Case Studies</option>
+                <option value="13">14. 8. The Measurement Illusion (Lead vs Lag)</option>
+                <option value="14">15. 8. Operational Measurement: KPI Trees</option>
+                <option value="15">16. Workshop 3 Lab 3: Bakery KPI Tree</option>
+                <option value="16">17. Thank You &amp; Q&amp;A</option>
+            </select>
+            <span id="slide-counter" class="text-xs font-bold text-gray-500">Slide 1 of 17</span>
+        </div>
+
+        <div class="text-xs font-medium text-charcoal tracking-wide">
+            Connecting Strategy to Reality
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button id="prevBtn" onclick="window.changeSlide(-1)" class="px-3.5 py-1.5 bg-cream hover:bg-gray-200 text-charcoal font-bold text-xs rounded-lg transition disabled:opacity-40">
+                ← Prev
+            </button>
+            <button id="nextBtn" onclick="window.changeSlide(1)" class="px-4 py-1.5 bg-gold hover:bg-goldhover text-white font-bold text-xs rounded-lg shadow transition disabled:opacity-40">
+                Next →
+            </button>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         PROGRESSIVE DISCLOSURE MODAL (QUOTES, SOFTWARE UI, SYLLABUS, THANK YOU)
+         ========================================== -->
+    <div id="enrichment-overlay" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target===this) window.closeEnrichment()">
+        <div class="glass-drawer border-2 border-gold rounded-2xl max-w-2xl w-full p-6 text-charcoal relative">
+            <div class="flex justify-between items-start border-b border-gold/30 pb-3 mb-4">
+                <div>
+                    <span id="modal-category-badge" class="px-2.5 py-1 bg-gold text-white font-bold text-[10px] uppercase tracking-widest rounded-full">EXECUTIVE INSIGHT</span>
+                    <h3 id="modal-title" class="text-xl font-extrabold text-charcoal mt-1.5">Slide Enrichment</h3>
+                </div>
+                <button onclick="window.closeEnrichment()" class="w-8 h-8 rounded-full bg-cream hover:bg-gold hover:text-white font-bold text-sm flex items-center justify-center transition">✕</button>
+            </div>
+
+            <div id="modal-body" class="space-y-3 text-sm leading-relaxed"></div>
+
+            <div class="mt-5 pt-3 border-t border-gray-200 flex flex-wrap justify-between items-center gap-2">
+                <div class="flex gap-2">
+                    <button onclick="window.openEnrichment('quote')" id="modal-tab-quote" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cream text-charcoal">💬 Quote &amp; Citation</button>
+                    <button onclick="window.openEnrichment('tool')" id="modal-tab-tool" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cream text-charcoal">🛠️ Industry Tool UI</button>
+                    <button onclick="window.openEnrichment('syllabus')" id="modal-tab-syllabus" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cream text-charcoal">🎓 Syllabus ILO</button>
+                </div>
+                <button onclick="window.closeEnrichment()" class="px-4 py-1.5 bg-charcoal text-white text-xs font-bold rounded-lg hover:bg-black">Close (Esc)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         17-SLIDE GRID NAVIGATOR OVERLAY
+         ========================================== -->
+    <div id="slide-grid-overlay" class="hidden fixed inset-0 bg-charcoal/95 backdrop-blur-md z-50 p-6 md:p-8 overflow-y-auto custom-scroll">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-5 border-b border-white/15 pb-3">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-gold">ROME BUSINESS SCHOOL • LESSON 2 MASTER RUN-OF-SHOW</span>
+                    <h2 class="text-2xl font-bold text-white">All 17 Slides &amp; Pacing Map (Click any slide to jump)</h2>
+                </div>
+                <button onclick="window.toggleSlideGrid()" class="px-4 py-2 bg-gold text-white font-bold text-xs rounded-lg">✕ Close Grid (Esc)</button>
+            </div>
+            <div id="slide-grid-cards" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5"></div>
+        </div>
+    </div>
+
+    <!-- Non-intrusive Stage Zoom Toast (Appears briefly when pressing + / - / 0) -->
+    <div id="zoom-toast" class="fixed bottom-14 right-6 z-50 pointer-events-none opacity-0 transition-opacity duration-300 bg-charcoal/95 text-white border border-gold px-3.5 py-1.5 rounded-xl shadow-lg text-xs font-bold flex items-center gap-2">
+        <span class="text-gold">🔍 Stage Zoom:</span>
+        <span id="zoom-toast-val">100%</span>
+        <span class="text-[10px] text-gray-400 font-normal">(+ / - keys, 0 reset)</span>
+    </div>
+
+    <script>
+        // ==========================================
+        // 17-SLIDE MASTER DATABASE (ZERO RAW LATEX!)
+        // ==========================================
+        window.slideEnrichment = [
+            {
+                title: "1. Title & Lesson 2 Overview",
+                pacing: "🕒 Min 00–10 / 180m • Welcome",
+                toolName: "SAP S/4HANA & Celonis",
+                quote: `"Matching supply with demand is the heart of operations management." — Gérard Cachon & Christian Terwiesch (4th Ed.)`,
+                citation: `Cachon & Terwiesch (2019), "Matching Supply with Demand: An Introduction to Operations Management", 4th Ed., McGraw-Hill.`,
+                toolHtml: `<strong>Enterprise Operations Stack:</strong> Real-time process flow is mined via <em>Celonis</em>, manufacturing execution runs on <em>SAP Digital Manufacturing</em>, and shop-floor KPIs stream via <em>PowerBI / Grafana</em>.`,
+                ilo: `<strong>Syllabus ILO 2 & 3:</strong> Recognize and apply methods, tools, and techniques used to analyze, streamline, and manage operations.`
+            },
+            {
+                title: "2. The Four Dimensions of Operations",
+                pacing: "🕒 Min 10–22 / 180m • Strategic Trade-offs",
+                toolName: "Balanced Scorecard Strategy Map",
+                quote: `"Operational effectiveness means performing similar activities better than rivals; strategy means choosing a different set of trade-offs." — Michael E. Porter (1996)`,
+                citation: `Syllabus Section: "The four dimensions of Operations Management and their associated trade-offs"; Abbas & Goosheh, Ch. 1.`,
+                toolHtml: `<strong>Competitive Operations Radar:</strong> Executives benchmark their plant across Cost, Quality, Speed, and Flexibility to ensure floor managers don't optimize the wrong dimension.`,
+                ilo: `<strong>Syllabus Section:</strong> The four dimensions of Operations Management and their associated trade-offs.`
+            },
+            {
+                title: "3. The Anchor Use-Case: Roman Pizzeria",
+                pacing: "🕒 Min 22–34 / 180m • Strategy-to-Floor Bridge",
+                toolName: "Toast POS & Kitchen Telemetry",
+                quote: `"Never teach an operational formula before the student can see the queue in their mind's eye." — Operations Pedagogy Rule`,
+                citation: `Cachon & Terwiesch, Ch. 2: "The Process View of the Organization".`,
+                toolHtml: `<strong>Kitchen Display Systems (KDS):</strong> Modern restaurant operations track exact ticket queue (WIP), oven throughput (Flow Rate), and ticket fulfilment time (Flow Time) on live overhead screens.`,
+                ilo: `<strong>Syllabus Section:</strong> Process Analysis & Key Metrics (Intuitive grounding).`
+            },
+            {
+                title: "4. Defining the Mechanics: Flow and Metrics",
+                pacing: "🕒 Min 34–50 / 180m • Core Lecture",
+                toolName: "Celonis Process Flow Monitor",
+                quote: `"Every business—whether a hospital ER, a software team, or a brewery—is a network of flows." — Cachon & Terwiesch`,
+                citation: `Cachon & Terwiesch, Ch. 2; Syllabus: "Flow Unit, Flow Rate, Flow Time, Inventory, Bottlenecks, and Takt Time".`,
+                toolHtml: `<strong>Celonis & Kanban Telemetry:</strong> Automatically measures Flow Rate (Throughput/hr), Flow Time (Lead Time), and WIP Inventory across thousands of digital tickets or factory batches.`,
+                ilo: `<strong>Syllabus Section:</strong> Flow Unit, Flow Rate, Flow Time, Inventory, and Takt Time.`
+            },
+            {
+                title: "5. The Reality of Capacity: Design vs. Effective",
+                pacing: "🕒 Min 50–62 / 180m • Core Lecture",
+                toolName: "Siemens MindSphere OEE",
+                quote: `"Planning a factory around Design Capacity is a guaranteed recipe for missed deadlines. Always plan around Effective Capacity." — Abbas & Goosheh`,
+                citation: `Abbas & Goosheh, "Fundamentals of Operations Management"; Syllabus: "Design Capacity vs Effective Capacity".`,
+                toolHtml: `<strong>Overall Equipment Effectiveness (OEE) Sensors:</strong> IoT sensors on factory machines track Design Capacity vs. Effective Capacity after planned maintenance and shift breaks.`,
+                ilo: `<strong>Syllabus Section:</strong> Key Indicators: Design Capacity vs Effective Capacity, Utilization vs Efficiency.`
+            },
+            {
+                title: "6. Productivity vs. Efficiency vs. Utilization",
+                pacing: "🕒 Min 62–72 / 180m • Syllabus Deep-Dive",
+                toolName: "Investopedia & OEE Dashboard",
+                quote: `"Efficiency is doing things right; effectiveness is doing the right things. Keeping a machine 100% utilized making unsold goods is pure waste." — Peter Drucker / Taiichi Ohno`,
+                citation: `Syllabus Pre-reading: https://www.investopedia.com/terms/e/efficiency.asp`,
+                toolHtml: `<strong>Executive Productivity Scorecards:</strong> Separates Total Factor Productivity (Output ÷ Input), Efficiency (Actual ÷ Effective Capacity), and Utilization (Actual ÷ Design Capacity).`,
+                ilo: `<strong>Syllabus Section:</strong> The concepts of Productivity and Efficiency.`
+            },
+            {
+                title: "7. Little's Law (I = R × T)",
+                pacing: "🕒 Min 72–85 / 180m • Core Lecture",
+                toolName: "Little's Law Queuing Engine",
+                quote: `"The average number of items in a queuing system equals the average rate at which items arrive multiplied by the average time that an item spends in the system." — John D.C. Little (1961)`,
+                citation: `John D.C. Little (1961), "A Proof for the Queuing Formula: L = λW", Operations Research.`,
+                toolHtml: `<strong>Cloud Load Balancers & Hospital Bed Trackers:</strong> Use Little's Law (T = I ÷ R) in real time to predict customer wait times and server latency.`,
+                ilo: `<strong>Syllabus Section:</strong> Application of Little's Law.`
+            },
+            {
+                title: "8. Activity: Little's Law at Work",
+                pacing: "⏱️ Min 85–95 / 180m • Class Exercise",
+                toolName: "Jira Kanban WIP Limiter",
+                quote: `"Stop starting, start finishing! The fastest way to cut Flow Time (T) is to reduce WIP Inventory (I)." — Agile & Lean Kanban Axiom`,
+                citation: `Syllabus In-Class Activity: "Exercise: Little's Law at work!".`,
+                toolHtml: `<strong>Kanban WIP Limits:</strong> FinTech startups cap the number of active loan applications per underwriter to mathematically force Flow Time down via Little's Law.`,
+                ilo: `<strong>Syllabus In-Class Activity:</strong> Exercise: Little's Law at work!`
+            },
+            {
+                title: "9. Workshop 1 Lab 1: The ER Triage Crisis",
+                pacing: "⏱️ Min 95–112 / 180m • Breakout Lab 1",
+                toolName: "Epic Systems ER Triage Board",
+                quote: `"In healthcare operations, Inventory is not boxes in a warehouse—it is human beings in pain in a waiting room." — Healthcare Operations Institute`,
+                citation: `Cachon & Terwiesch, Ch. 3; Rome Business School Lab 1 Case.`,
+                toolHtml: `<strong>Epic Hospital Command Center:</strong> Displays live ER waiting room census (I), doctor discharge velocity (R), and predicted patient wait time (T = I ÷ R).`,
+                ilo: `<strong>Syllabus Lab 1:</strong> Applying Little's Law and waste identification to service operations.`
+            },
+            {
+                title: "10. Bottlenecks & Sensitivity Analysis",
+                pacing: "🕒 Min 112–125 / 180m • Core Lecture",
+                toolName: "Goldratt Theory of Constraints (TOC)",
+                quote: `"Any improvement not made at the bottleneck is an illusion." — Eliyahu M. Goldratt ('The Goal', 1984)`,
+                citation: `Eliyahu M. Goldratt (1984), "The Goal: A Process of Ongoing Improvement"; Syllabus: "Find and eliminate a bottleneck".`,
+                toolHtml: `<strong>Digital Twin Bottleneck Simulation:</strong> Identifies the step with Min(Capacity) and calculates marginal ROI (€/hr) before capital expenditure is approved.`,
+                ilo: `<strong>Syllabus Section:</strong> Find and eliminate a bottleneck; Introduction to Sensitivity Analysis.`
+            },
+            {
+                title: "11. Workshop 2 Lab 2: The €5M Pharma Trap",
+                pacing: "⏱️ Min 125–140 / 180m • Breakout Lab 2",
+                toolName: "CAPEX Sensitivity Financial Model",
+                quote: `"Spending €5 Million to speed up a non-bottleneck step simply builds a bigger pile of unfinished inventory in front of the bottleneck." — Cachon & Terwiesch`,
+                citation: `Syllabus In-Class Activity: "Exercise: Find the bottleneck and sensitivity analysis".`,
+                toolHtml: `<strong>Pharma Bioreactor Scheduler:</strong> Models Synthesis (100 L/d), Purification (40 L/d), and Packaging (80 L/d) to prove that upgrading Step 2 doubles plant profit from €2M/d to €4M/d.`,
+                ilo: `<strong>Syllabus Lab 2:</strong> Process Improvement & Financial Impact via Sensitivity Analysis.`
+            },
+            {
+                title: "12. The Story of Lean & Eliminating Muda",
+                pacing: "🕒 Min 140–150 / 180m • Core Lecture",
+                toolName: "Toyota Production System (TPS) & VSM",
+                quote: `"All we are doing is looking at the timeline from the moment the customer gives us an order to the point when we collect the cash. And we are reducing that timeline by removing the non-value-added wastes." — Taiichi Ohno`,
+                citation: `Taiichi Ohno (1988), "Toyota Production System: Beyond Large-Scale Production"; Womack & Jones, "Lean Thinking".`,
+                toolHtml: `<strong>Value Stream Mapping (VSM):</strong> Maps every process step as Value-Added (Green) vs. Non-Value-Added Muda (Red) across the 8 wastes (TIMWOODS).`,
+                ilo: `<strong>Syllabus ILO 5:</strong> Understand the broader impact of Lean Manufacturing on operations and projects.`
+            },
+            {
+                title: "13. Muda in Reality: Case Studies",
+                pacing: "🕒 Min 150–158 / 180m • Case Comparison",
+                toolName: "U-Cell Layout & eBR (Electronic Batch Record)",
+                quote: `"Motion is not work. Walking 50 meters to fetch bread or waiting 14 days for a wet-ink signature adds zero value to the passenger or patient." — Shigeo Shingo`,
+                citation: `Shigeo Shingo, "A Study of the Toyota Production System".`,
+                toolHtml: `<strong>Spaghetti Diagram & MasterControl eBR:</strong> Redesigns kitchens into U-Shaped cells and replaces 14-day paper QA signatures with real-time tablet sign-offs.`,
+                ilo: `<strong>Syllabus Section:</strong> The concepts of Lean that changed the world of production and projects.`
+            },
+            {
+                title: "14. The Measurement Illusion (Lagging vs. Leading)",
+                pacing: "🕒 Min 158–165 / 180m • Core Lecture",
+                toolName: "Shop-Floor Andon vs. ERP P&L",
+                quote: `"Managing a factory only by monthly Net Profit is like driving a Ferrari down the Autostrada looking only in the rearview mirror." — Kaplan & Norton`,
+                citation: `Kaplan & Norton, "The Balanced Scorecard"; Syllabus: "Operational Performance Measurement".`,
+                toolHtml: `<strong>Andon Cord & Real-Time Leading Telemetry:</strong> Gives operators live Leading Inputs (Cycle Time, Scrap %) that mathematically drive Lagging Financial Outcomes (EBITDA).`,
+                ilo: `<strong>Syllabus ILO 1 & 3:</strong> Connecting operational metrics to financial outcomes.`
+            },
+            {
+                title: "15. Operational Performance Measurement: KPI Trees",
+                pacing: "🕒 Min 165–172 / 180m • Core Lecture",
+                toolName: "DuPont / ROIC Operational KPI Tree",
+                quote: `"A KPI Tree translates the CEO's financial language into the operator's physical language." — Operations Strategy Principle`,
+                citation: `Syllabus Section: "Operational Performance Measurement: KPI Trees and their role in monitoring operations".`,
+                toolHtml: `<strong>Interactive KPI Tree Software (PowerBI Decomposition Tree):</strong> Visually links Net Profit ➔ Revenue & COGS ➔ Machine Setup Time (SMED) & Scrap Rate.`,
+                ilo: `<strong>Syllabus Section:</strong> KPI Trees and their role in monitoring operations.`
+            },
+            {
+                title: "16. Workshop 3 Lab 3: The KPI Tree Simulator",
+                pacing: "⏱️ Min 172–178 / 180m • Capstone Lab 3",
+                toolName: "Inline Checkweigher & SPC Chart",
+                quote: `"When the dough-cutter operator sees that 10 grams of overweight dough per loaf equals €1.5M of annual profit, strategy becomes reality." — Lorenzo de Virgilio`,
+                citation: `Rome Business School Capstone Lab 3: The Commercial Bakery.`,
+                toolHtml: `<strong>Statistical Process Control (SPC) Checkweigher:</strong> Measures every loaf in milliseconds, alerting the operator to calibrate the blade before flour waste erodes the +2% margin target.`,
+                ilo: `<strong>Syllabus Lab 3:</strong> Translating financial mandates into shop-floor Leading KPIs.`
+            },
+            {
+                title: "17. Thank You & Q&A",
+                pacing: "🕒 Min 178–180 / 180m • Course Wrap-Up",
+                toolName: "Complete Course Synthesis",
+                quote: `"Better Managers for a Better World — Connecting Strategy to Reality." — Rome Business School`,
+                citation: `All 5 Course ILOs Completed — Projects Build the Engine; Operations Run & Optimize the Engine!`,
+                toolHtml: `<strong>Executive Takeaway:</strong> You now command both halves of the managerial toolkit: Project Management (Lesson 1) and Operations Management (Lesson 2).`,
+                ilo: `<strong>All 5 Course ILOs Completed!</strong>`
+            }
+        ];
+
+        // ==========================================
+        // NAVIGATION & RIBBON SYNC ENGINE
+        // ==========================================
+        window.currentSlide = 0;
+        window.totalSlides = 17;
+
+        window.changeSlide = function(dir) {
+            window.jumpToSlide(window.currentSlide + dir);
+        };
+
+        window.jumpToSlide = function(index) {
+            if (index < 0 || index >= window.totalSlides) return;
+            window.currentSlide = index;
+
+            for (let i = 0; i < window.totalSlides; i++) {
+                const el = document.getElementById(`slide-${i}`);
+                if (el) {
+                    if (i === window.currentSlide) el.classList.add('active');
+                    else el.classList.remove('active');
+                }
+            }
+
+            document.getElementById('slide-Select').value = window.currentSlide;
+            document.getElementById('slide-counter').textContent = `Slide ${window.currentSlide + 1} of ${window.totalSlides}`;
+            document.getElementById('prevBtn').disabled = window.currentSlide === 0;
+            document.getElementById('nextBtn').disabled = window.currentSlide === window.totalSlides - 1;
+
+            const info = window.slideEnrichment[window.currentSlide];
+            if (info) {
+                document.getElementById('pacing-badge').textContent = info.pacing;
+                document.getElementById('header-tool-label').textContent = info.toolName;
+                document.getElementById('ribbon-quote-text').textContent = info.quote;
+                document.getElementById('ribbon-tool-name').textContent = info.toolName;
+            }
+        };
+
+        // ==========================================
+        // CENTRAL SLIDE STAGE KEYBOARD ZOOM (+ / - / 0)
+        // ==========================================
+        window.stageZoom = 100;
+        let zoomToastTimeout = null;
+
+        window.adjustStageZoom = function(delta) {
+            if (delta === 0) {
+                window.stageZoom = 100;
+            } else {
+                window.stageZoom = Math.min(160, Math.max(75, window.stageZoom + delta));
+            }
+            const stage = document.getElementById('slide-stage');
+            if (stage) {
+                stage.style.zoom = (window.stageZoom / 100);
+                if (window.stageZoom > 100) {
+                    stage.style.maxWidth = '96vw';
+                } else {
+                    stage.style.maxWidth = '';
+                }
+            }
+            const toast = document.getElementById('zoom-toast');
+            const toastVal = document.getElementById('zoom-toast-val');
+            if (toast && toastVal) {
+                toastVal.textContent = `${window.stageZoom}%`;
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100');
+                if (zoomToastTimeout) clearTimeout(zoomToastTimeout);
+                zoomToastTimeout = setTimeout(() => {
+                    toast.classList.remove('opacity-100');
+                    toast.classList.add('opacity-0');
+                }, 1300);
+            }
+        };
+
+        // ==========================================
+        // SLIDE 1: OVERVIEW PREVIEW
+        // ==========================================
+        const overviewTopics = [
+            { tag: "PART 1 (MIN 00–50) • SLIDES 1–9", title: "4 Dimensions, Pizzeria Anchor, Flow & Little's Law", desc: "Start with the 4 Strategic Dimensions of Operations, bridge into our Roman Pizzeria Lunch Rush anchor story, and master Flow Metrics & Little's Law (I = R × T).", slideIdx: 1 },
+            { tag: "PART 2 (MIN 50–140) • SLIDES 10–11", title: "Bottlenecks & Sensitivity Analysis", desc: "Learn why System Throughput = Min(Capacity of All Steps) and solve the €5M Biologics Pharma Plant Bottleneck Trap.", slideIdx: 9 },
+            { tag: "PART 3 (MIN 140–158) • SLIDES 12–13", title: "Lean Manufacturing & Eliminating Muda", desc: "Explore the post-WWII Toyota Production System, the 8 Wastes (TIMWOODS), Airline Catering U-Cells, and Pharma Digital QA.", slideIdx: 11 },
+            { tag: "PART 4 (MIN 158–180) • SLIDES 14–17", title: "KPI Trees & Operational Execution", desc: "Distinguish Rearview Mirror (Lagging) vs. Windshield (Leading) metrics and solve the 100k-loaf Commercial Bakery KPI Tree Lab.", slideIdx: 13 }
+        ];
+
+        window.previewTopic = function(idx) {
+            const t = overviewTopics[idx];
+            document.getElementById('topic-preview-tag').textContent = t.tag;
+            document.getElementById('topic-preview-title').textContent = t.title;
+            document.getElementById('topic-preview-desc').textContent = t.desc;
+            const btn = document.getElementById('topic-jump-btn');
+            btn.textContent = `Jump to ${t.title.split(',')[0]} →`;
+            btn.onclick = () => window.jumpToSlide(t.slideIdx);
+        };
+
+        // ==========================================
+        // SLIDE 3: ROMAN PIZZERIA ANCHOR CASE (CLEAN CAUSAL CHAIN, ZERO LATEX!)
+        // ==========================================
+        const pizzaStations = [
+            `🍕 <strong>Step 1 — Define the "Flow Unit":</strong> Before you can measure Speed or Cost in any business, you must ask: <strong>"What is the single item moving through our process?"</strong> In our pizzeria, 1 Flow Unit = <strong>1 Pizza Order</strong>. (In a Hospital ER = <em>1 Patient</em>; in a Bank = <em>1 Loan Application</em>).`,
+            `🔔 <strong>Step 2 — Measure "Takt Time" (Customer Demand Rhythm):</strong> At 1:00 PM, 30 hungry tourists walk in every 60 minutes. That means a new customer demands a pizza every <strong>60 mins ÷ 30 = 2 minutes (Takt Time)</strong>! To prevent a growing line, our kitchen must finish 1 pizza every 2 minutes.`,
+            `👥 <strong>Step 3 — Count "Inventory (WIP / I)":</strong> Look around the restaurant right now: how many orders are currently waiting in line, on the counter, or in the oven? There are <strong>15 active pizza orders (Inventory I = 15)</strong> inside the building.`,
+            `🔥 <strong>Step 4 — Find "Flow Rate (R)" &amp; The "Bottleneck":</strong> Our chef can stretch 60 doughs/hr, and the cashier can box 90/hr, but our <strong>Wood Oven can only bake 30 pizzas/hour</strong>. The oven is the <strong>Bottleneck</strong>, so our restaurant's <strong>Flow Rate (R) = 30 pizzas/hour</strong>!`,
+            `⏱️ <strong>Step 5 — Connect Everything with "Flow Time (T)" &amp; Little's Law:</strong> How long will a new tourist wait from door to table? Since <strong>15 orders are ahead of them (I = 15)</strong> and the oven finishes <strong>30 pizzas/hr (R = 30)</strong>, Wait Time <strong>T = 15 ÷ 30 = 0.5 hours (30 minutes)</strong>! That is Little's Law (<strong>I = R × T</strong>)!`
+        ];
+
+        window.selectPizzaAnchor = function(idx) {
+            document.getElementById('pizza-anchor-box').innerHTML = pizzaStations[idx];
+            for (let i = 0; i < 5; i++) {
+                document.getElementById(`pizza-st-${i}`).className = (i === idx)
+                    ? "p-2.5 rounded-xl bg-gold/25 border-2 border-gold cursor-pointer transition"
+                    : "p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 cursor-pointer transition";
+            }
+        };
+
+        // ==========================================
+        // SLIDE 2: 4 DIMENSIONS OF OPERATIONS
+        // ==========================================
+        window.inspectDimension = function(idx) {
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`dim-card-${i}`).className = (i === idx)
+                    ? "rbs-card p-4 cursor-pointer border-2 border-gold bg-goldlight transition flex flex-col justify-between"
+                    : "rbs-card p-4 cursor-pointer hover:border-gold transition flex flex-col justify-between";
+            }
+            if (idx === 0) window.setOpsProfile('ryanair');
+            if (idx === 1) window.setOpsProfile('ferrari');
+            if (idx === 2) window.setOpsProfile('amazon');
+        };
+
+        window.setOpsProfile = function(prof) {
+            ['ryanair', 'ferrari', 'amazon'].forEach(p => {
+                document.getElementById(`prof-${p}`).className = (p === prof)
+                    ? "px-2.5 py-1 bg-gold text-white text-xs font-bold rounded"
+                    : "px-2.5 py-1 bg-white/10 text-white text-xs font-bold rounded";
+            });
+            if (prof === 'ryanair') {
+                document.getElementById('bar-cost').style.width = '98%'; document.getElementById('bar-cost-lbl').textContent = '98% (Ultra-Low Cost)';
+                document.getElementById('bar-qual').style.width = '35%'; document.getElementById('bar-qual-lbl').textContent = '35% (No-Frills Cabin)';
+                document.getElementById('bar-spd').style.width = '90%'; document.getElementById('bar-spd-lbl').textContent = '90% (25m Turnaround)';
+                document.getElementById('bar-flex').style.width = '15%'; document.getElementById('bar-flex-lbl').textContent = '15% (Only Boeing 737s)';
+                document.getElementById('ops-profile-note').innerHTML = `✈️ <strong>Ryanair's Operational Trade-off:</strong> To achieve €19 tickets (<strong>98% Cost Efficiency</strong>) and 25-minute gate turnarounds, Ryanair sacrifices <strong>Flexibility</strong> (flies only Boeing 737s, zero seat recline, point-to-point routes).`;
+            } else if (prof === 'ferrari') {
+                document.getElementById('bar-cost').style.width = '20%'; document.getElementById('bar-cost-lbl').textContent = '20% (€350k+ Hand-Built)';
+                document.getElementById('bar-qual').style.width = '100%'; document.getElementById('bar-qual-lbl').textContent = '100% (F1 Engineering)';
+                document.getElementById('bar-spd').style.width = '25%'; document.getElementById('bar-spd-lbl').textContent = '25% (18-Month Waitlist)';
+                document.getElementById('bar-flex').style.width = '95%'; document.getElementById('bar-flex-lbl').textContent = '95% (Tailor-Made Atelier)';
+                document.getElementById('ops-profile-note').innerHTML = `🏎️ <strong>Ferrari Maranello's Trade-off:</strong> Competes on <strong>100% Quality</strong> and <strong>95% Tailor-Made Flexibility</strong>, intentionally sacrificing <strong>Speed</strong> (customers wait 18–24 months) and <strong>Unit Cost</strong>.`;
+            } else {
+                document.getElementById('bar-cost').style.width = '75%'; document.getElementById('bar-cost-lbl').textContent = '75% (Robotic Scale)';
+                document.getElementById('bar-qual').style.width = '85%'; document.getElementById('bar-qual-lbl').textContent = '85% (99.9% Order Accuracy)';
+                document.getElementById('bar-spd').style.width = '99%'; document.getElementById('bar-spd-lbl').textContent = '99% (Same-Day Prime)';
+                document.getElementById('bar-flex').style.width = '90%'; document.getElementById('bar-flex-lbl').textContent = '90% (100M+ SKUs)';
+                document.getElementById('ops-profile-note').innerHTML = `📦 <strong>Amazon Prime Fulfillment:</strong> Invests billions in Kiva warehouse robotics and predictive regional inventory to dominate <strong>Speed (Same-Day Delivery)</strong> and <strong>Variety Flexibility</strong>.`;
+            }
+        };
+
+        // ==========================================
+        // SLIDE 4: 4-INDUSTRY FLOW METRICS SWITCHER & STRONG HIGHLIGHTING
+        // ==========================================
+        const flowIndustries = {
+            pizza: {
+                title: "ACTIVE CASE: ROMAN PIZZERIA LUNCH RUSH",
+                u: "🍕 1 Pizza Order",
+                r: "30 Pizzas / hr",
+                t: "30 Mins (0.5 hrs)",
+                i: "15 Orders Inside",
+                takt: "🔔 Every 2 mins",
+                ex: ["🍕 1 Pizza Order", "🍕 30 Pizzas / hour", "🍕 30 Mins (0.5 hrs)", "🍕 15 Active Orders", "🍕 60m ÷ 30 = 2 mins/pizza"],
+                box: `🍕 <strong>Pizzeria Translation:</strong> Every <strong>Pizza</strong> (Flow Unit) takes <strong>30 mins</strong> (Flow Time) from order to table. We bake <strong>30 pizzas/hr</strong> (Flow Rate), and there are <strong>15 orders</strong> (Inventory) active right now.`
+            },
+            er: {
+                title: "ACTIVE CASE: SATURDAY NIGHT HOSPITAL ER (LAB 1)",
+                u: "🏥 1 ER Patient",
+                r: "6 Patients / hr",
+                t: "2.5 Hours (150m)",
+                i: "15 Patients Waiting",
+                takt: "🔔 Every 12 mins",
+                ex: ["🏥 1 ER Patient", "🏥 6 Patients / hr (3 Docs)", "🏥 2.5 Hours (150 mins)", "🏥 15 Patients in ER", "🏥 480m ÷ 40 = 12 mins/pt"],
+                box: `🏥 <strong>Hospital ER Translation (Lab 1 Preview):</strong> Every <strong>Patient</strong> (Flow Unit) faces <strong>15 patients in the waiting room</strong> (Inventory). With 3 doctors treating <strong>6 patients/hr</strong> (Flow Rate), Wait Time = 15 ÷ 6 = <strong>2.5 hours</strong>!`
+            },
+            pharma: {
+                title: "ACTIVE CASE: BIOLOGICS PHARMA PLANT (LAB 2)",
+                u: "🧬 1 Liter Biologics",
+                r: "40 Liters / day",
+                t: "5 Days in Plant",
+                i: "200 Liters in Vats",
+                takt: "🔔 24 mins / Liter",
+                ex: ["🧬 1 Liter of Biologics", "🧬 40 Liters / day", "🧬 5 Days in Plant", "🧬 200 Liters in WIP", "🧬 24h ÷ 60L = 24 mins/L"],
+                box: `🧬 <strong>Biologics Pharma Translation (Lab 2 Preview):</strong> 1 <strong>Liter of vaccine</strong> (Flow Unit) worth €50k exits Purification at <strong>40 Liters/day</strong> (Flow Rate). With <strong>200 Liters</strong> in vats (WIP), each batch takes <strong>5 days</strong> (Flow Time).`
+            },
+            loan: {
+                title: "ACTIVE CASE: FINTECH LOAN STARTUP (SLIDE 8)",
+                u: "🏦 1 Loan File",
+                r: "20 Apps / day",
+                t: "5 Days to Approve",
+                i: "100 Apps on Desks",
+                takt: "🔔 Every 24 mins",
+                ex: ["🏦 1 Loan Application", "🏦 20 Apps / day", "🏦 5 Days to Approve", "🏦 100 Apps in WIP", "🏦 480m ÷ 20 = 24 mins/app"],
+                box: `🏦 <strong>FinTech Loan Translation (Slide 8 Preview):</strong> The startup receives <strong>20 loan applications/day</strong> (Flow Rate) and each takes <strong>5 days</strong> (Flow Time) to underwrite, leaving <strong>100 applications</strong> (Inventory) sitting on desks!`
+            }
+        };
+
+        window.setFlowIndustry = function(key) {
+            const d = flowIndustries[key];
+            document.getElementById('flow-case-title').textContent = d.title;
+            document.getElementById('svg-flow-u').textContent = d.u;
+            document.getElementById('svg-flow-r').textContent = d.r;
+            document.getElementById('svg-flow-t').textContent = d.t;
+            document.getElementById('svg-flow-i').textContent = d.i;
+            document.getElementById('svg-flow-takt').textContent = d.takt;
+            document.getElementById('flow-live-example-box').innerHTML = d.box;
+            for (let i = 0; i < 5; i++) {
+                document.getElementById(`fm-ex-${i}`).textContent = d.ex[i];
+            }
+            ['pizza', 'er', 'pharma', 'loan'].forEach(k => {
+                document.getElementById(`flow-ind-${k}`).className = (k === key)
+                    ? "px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg shadow"
+                    : "px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg";
+            });
+        };
+
+        window.highlightFlowMetric = function(idx) {
+            for (let i = 0; i < 5; i++) {
+                const card = document.getElementById(`fm-card-${i}`);
+                const badge = document.getElementById(`fm-ex-${i}`);
+                const pipe = document.getElementById(`pipe-box-${i}`);
+                if (i === idx) {
+                    card.className = "rbs-card p-3.5 cursor-pointer border-2 border-gold ring-4 ring-gold/30 bg-goldlight transition transform -translate-y-0.5";
+                    if (badge) badge.className = "text-[11px] font-bold px-2 py-0.5 bg-gold text-white rounded shadow";
+                    if (pipe) pipe.className = (i === 2)
+                        ? "p-2 rounded-lg bg-gold/30 border-2 border-gold cursor-pointer transition flex justify-between items-center text-xs"
+                        : "p-2.5 rounded-lg bg-gold/30 border-2 border-gold cursor-pointer transition";
+                } else {
+                    card.className = "rbs-card p-3.5 cursor-pointer hover:border-gold transition";
+                    if (badge) badge.className = "text-[11px] font-bold px-2 py-0.5 bg-cream rounded text-charcoal";
+                    if (pipe) pipe.className = (i === 2)
+                        ? "p-2 rounded-lg bg-white/5 border border-white/15 cursor-pointer transition flex justify-between items-center text-xs"
+                        : "p-2.5 rounded-lg bg-white/5 border border-white/15 cursor-pointer transition";
+                }
+            }
+        };
+
+        // ==========================================
+        // SLIDE 5 & 6: CAPACITY, UTILIZATION, EFFICIENCY
+        // ==========================================
+        window.loadCapacityPreset = function(des, eff, act, title) {
+            document.getElementById('cap-design').value = des;
+            document.getElementById('cap-eff').value = eff;
+            document.getElementById('cap-act').value = act;
+            document.getElementById('cap-preset-title').textContent = title.toUpperCase();
+            window.updateCapacityCalc();
+        };
+
+        window.updateCapacityCalc = function() {
+            const des = parseInt(document.getElementById('cap-design').value);
+            const eff = parseInt(document.getElementById('cap-eff').value);
+            const act = parseInt(document.getElementById('cap-act').value);
+
+            document.getElementById('cap-design-val').textContent = `${des} units/hr`;
+            document.getElementById('cap-eff-val').textContent = `${eff} units/hr`;
+            document.getElementById('cap-act-val').textContent = `${act} units/hr`;
+
+            const util = ((act / des) * 100).toFixed(1);
+            const effPct = ((act / eff) * 100).toFixed(1);
+
+            document.getElementById('cap-util-res').textContent = `${util}%`;
+            document.getElementById('cap-eff-res').textContent = `${effPct}%`;
+        };
+
+        window.testManagerTrap = function(mgr) {
+            const res = document.getElementById('mgr-trap-result');
+            if (mgr === 'A') {
+                res.innerHTML = `🚨 <strong>Manager A ("Busy Bob") is a Disaster!</strong> Chasing <strong>99% Utilization</strong> caused machine breakdowns, 20% defects, and a warehouse full of unsold inventory (Overproduction Muda).`;
+            } else {
+                res.innerHTML = `🏆 <strong>Promote Manager B ("Lean Elena")!</strong> Even though her Utilization is 82%, her <strong>Efficiency is 98%</strong> with zero defects, Planned Maintenance respected, and output matched to Customer Takt Time!`;
+            }
+        };
+
+        // ==========================================
+        // SLIDE 7, 8, 9: LITTLE'S LAW, LOAN ACTIVITY, ER LAB 1 (ZERO LATEX!)
+        // ==========================================
+        window.setLittlesMode = function(mode) {
+            ['I', 'T', 'R'].forEach(m => {
+                document.getElementById(`ll-mode-${m}`).className = (m === mode)
+                    ? "p-2.5 bg-gold text-white text-xs font-bold rounded-xl shadow text-center transition"
+                    : "p-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl text-center transition";
+            });
+            const box = document.getElementById('ll-formula-explain');
+            const big = document.getElementById('ll-big-banner');
+            const sub = document.getElementById('ll-sub-banner');
+            if (mode === 'I') {
+                big.textContent = "I = R × T";
+                sub.textContent = "Inventory (WIP) = Flow Rate × Flow Time";
+                box.innerHTML = `🔢 <strong>Mode 1 — Finding Inventory (I = R × T):</strong><br>Used on <strong>Slide 8 (Loan Startup)</strong>: When you know arrival rate (<strong>R</strong>) and processing time (<strong>T</strong>), multiply them to find how many items are sitting in the queue (<strong>I</strong>)!`;
+            } else if (mode === 'T') {
+                big.textContent = "T = I ÷ R";
+                sub.textContent = "Wait / Flow Time = Inventory (Queue) ÷ Flow Rate";
+                box.innerHTML = `⏱️ <strong>Mode 2 — Finding Wait Time (T = I ÷ R):</strong><br>Used in <strong>Lab 1 (Hospital ER Triage)</strong>: Divide the waiting room queue (<strong>I = 15 patients</strong>) by the doctors' service speed (<strong>R = 6 patients/hr</strong>) to find Wait Time (<strong>T = 2.5 hours</strong>)!`;
+            } else {
+                big.textContent = "R = I ÷ T";
+                sub.textContent = "Required Flow Rate = Inventory ÷ Flow Time";
+                box.innerHTML = `⚡ <strong>Mode 3 — Finding Throughput Rate (R = I ÷ T):</strong><br>If 30 tables are occupied in a restaurant (<strong>I = 30</strong>) and each table dines for 1.5 hours (<strong>T = 1.5</strong>), the kitchen serves <strong>R = 30 ÷ 1.5 = 20 tables/hour</strong>!`;
+            }
+        };
+
+        window.updateLoanSim = function() {
+            const r = parseInt(document.getElementById('loan-r').value);
+            const t = parseInt(document.getElementById('loan-t').value);
+            document.getElementById('loan-r-lbl').textContent = `${r} / day`;
+            document.getElementById('loan-t-lbl').textContent = `${t} days`;
+            document.getElementById('loan-i-res').textContent = `${r * t} Applications`;
+        };
+
+        window.revealLoanAnswer = function() {
+            document.getElementById('loan-ans-prompt').classList.add('hidden');
+            document.getElementById('loan-ans-box').classList.remove('hidden');
+            window.updateLoanSim();
+        };
+
+        window.toggleLoanFollowUp = function() {
+            document.getElementById('loan-followup-ans').classList.toggle('hidden');
+        };
+
+        let erSeconds = 600;
+        let erInterval = null;
+        window.toggleErTimer = function() {
+            const btn = document.getElementById('er-timer-btn');
+            const disp = document.getElementById('er-timer-disp');
+            if (erInterval) {
+                clearInterval(erInterval); erInterval = null;
+                btn.textContent = "▶ Resume Timer";
+            } else {
+                btn.textContent = "⏸ Pause Timer";
+                erInterval = setInterval(() => {
+                    if (erSeconds > 0) {
+                        erSeconds--;
+                        const m = String(Math.floor(erSeconds / 60)).padStart(2, '0');
+                        const s = String(erSeconds % 60).padStart(2, '0');
+                        disp.textContent = `⏱️ ${m}:${s}`;
+                    } else {
+                        clearInterval(erInterval); erInterval = null;
+                        btn.textContent = "⏰ Time's Up!";
+                    }
+                }, 1000);
+            }
+        };
+
+        window.toggleErStep = function(num) {
+            document.getElementById(`er-step-${num}`).classList.toggle('hidden');
+        };
+
+        window.revealAllErSteps = function() {
+            [1, 2, 3].forEach(n => document.getElementById(`er-step-${n}`).classList.remove('hidden'));
+        };
+
+        window.resetErSteps = function() {
+            [1, 2, 3].forEach(n => document.getElementById(`er-step-${n}`).classList.add('hidden'));
+        };
+
+        // ==========================================
+        // SLIDE 10 & 11: BOTTLENECKS & PHARMA LAB 2 (NO SPOILERS!)
+        // ==========================================
+        window.revealSlide10Bottleneck = function() {
+            const box = document.getElementById('s10-step-b-box');
+            const title = document.getElementById('s10-step-b-title');
+            const val = document.getElementById('s10-step-b-val');
+            const ans = document.getElementById('s10-bn-answer');
+            box.className = "flex-1 p-2.5 bg-red-50 rounded-lg border-2 border-red-600 ring-4 ring-red-500/20 cursor-pointer transition-all";
+            title.className = "font-bold text-red-700";
+            title.textContent = "Step B (Bottleneck!)";
+            val.className = "text-red-600 font-extrabold text-sm mt-0.5";
+            ans.classList.remove('hidden');
+        };
+
+        window.resetSlide10 = function() {
+            const box = document.getElementById('s10-step-b-box');
+            const title = document.getElementById('s10-step-b-title');
+            const val = document.getElementById('s10-step-b-val');
+            box.className = "flex-1 p-2.5 bg-white rounded-lg border border-gray-300 cursor-pointer transition-all";
+            title.className = "font-bold text-charcoal";
+            title.textContent = "Step B";
+            val.className = "text-charcoal font-extrabold text-sm mt-0.5";
+            document.getElementById('s10-bn-answer').classList.add('hidden');
+            document.getElementById('s10-sens-c').classList.add('hidden');
+            document.getElementById('s10-sens-b').classList.add('hidden');
+        };
+
+        window.testBottleneckUpgrade = function(step) {
+            const box = document.getElementById('bn-sim-result');
+            if (step === 'C') {
+                document.getElementById('s10-sens-c').classList.remove('hidden');
+                box.innerHTML = `❌ <strong>Upgraded Step C (60 ➔ 80 u/h):</strong> System Throughput = Min(50, 20, 80) = <strong>still 20 u/h</strong>! Extra revenue = <strong>€0</strong>! Step C simply sits idle waiting for Step B.`;
+            } else if (step === 'B') {
+                window.revealSlide10Bottleneck();
+                document.getElementById('s10-sens-b').classList.remove('hidden');
+                box.innerHTML = `✅ <strong>Upgraded Bottleneck Step B (20 ➔ 25 u/h):</strong> System Throughput jumps to Min(50, 25, 60) = <strong>25 u/h (+5 u/h)</strong>! Revenue increases by <strong>+€500/hr</strong> (to €2,500/hr), paying back €5k in <strong>10 hours</strong>!`;
+            }
+        };
+
+        window.evaluatePharmaLab = function(opt) {
+            const res = document.getElementById('pharma-lab-result');
+            if (opt === 'A') {
+                res.innerHTML = `🚨 <strong>Option A is the €5M TRAP!</strong><br>• Current Baseline Output = Min(100, 40, 80) = <strong>40 L/day</strong> (€2.0M/day profit).<br>• After Option A (Step 1 ➔ 150 L/d): Output = Min(150, 40, 80) = <strong>Still 40 L/day!</strong><br>• Extra Profit = <strong>€0 / day</strong>. You burned €5 Million speeding up a non-bottleneck!`;
+            } else {
+                res.innerHTML = `🏆 <strong>Option B is the Winner!</strong><br>• Step 2 (Purification at 40 L/d) was the Bottleneck!<br>• Upgrading Step 2 to 80 L/d doubles plant output from 40 L/d to Min(100, 80, 80) = <strong>80 L/day (+40 L/d)</strong>!<br>• Daily Profit jumps from €2M/day to <strong>€4 Million/day (+€2M/day)</strong> — paying back the €5M investment in just <strong>2.5 days</strong>!`;
+            }
+        };
+
+        // ==========================================
+        // SLIDE 12 & 13: LEAN, TIMWOODS & MUDA CASES
+        // ==========================================
+        const mudaList = [
+            "🚚 <strong>T — Transportation Muda:</strong> Moving materials, parts, or food trays unnecessarily across long distances (e.g., Airline Catering slicing bread 50m from the fridge).",
+            "📦 <strong>I — Inventory Muda:</strong> Excess raw materials, unfinished WIP batches, or unread emails piling up and hiding bottlenecks.",
+            "🏃 <strong>M — Motion Muda:</strong> Workers walking, bending, or searching for tools because the workstation is poorly organized (solved with 5S).",
+            "⏳ <strong>W — Waiting Muda:</strong> People or batches sitting idle waiting for an upstream step or approval (e.g., €2M Pharma batch waiting 14 days in a freezer for a paper signature).",
+            "📈 <strong>O — Overproduction Muda:</strong> Producing more, sooner, or faster than the customer's Takt Time demands (Taiichi Ohno called this the worst waste of all!).",
+            "🔍 <strong>O — Overprocessing Muda:</strong> Adding complex features, 5 layers of sign-offs, or formatting reports that the customer neither needs nor values.",
+            "⚠️ <strong>D — Defects Muda:</strong> Scrapped loaves, software bugs, or wrong medical dosages requiring expensive rework and inspection.",
+            "🧠 <strong>S — Skills (Unused Talent):</strong> Hiring smart people and never asking front-line operators how to improve their own workstation (Kaizen)."
+        ];
+
+        window.selectMuda = function(idx) {
+            document.getElementById('muda-detail-box').innerHTML = mudaList[idx];
+            for (let i = 0; i < 8; i++) {
+                document.getElementById(`muda-btn-${i}`).className = (i === idx)
+                    ? "p-2 rounded-lg bg-gold text-white font-extrabold shadow"
+                    : "p-2 rounded-lg bg-white/10 text-white font-extrabold hover:bg-white/20";
+            }
+        };
+
+        let mudaFixed = false;
+        window.toggleMudaBeforeAfter = function() {
+            mudaFixed = !mudaFixed;
+            const btn = document.getElementById('muda-sim-btn');
+            const foodStat = document.getElementById('food-muda-stat');
+            const foodBar = document.getElementById('food-muda-bar');
+            const pharmaStat = document.getElementById('pharma-muda-stat');
+            const pharmaBar = document.getElementById('pharma-muda-bar');
+            const foodBadge = document.getElementById('food-sol-badge');
+            const pharmaBadge = document.getElementById('pharma-sol-badge');
+
+            if (mudaFixed) {
+                btn.textContent = "↺ Hide Solutions & Reset Waste State";
+                foodBadge.textContent = "✅ The U-Shaped Work Cell";
+                foodBadge.className = "px-3 py-1 bg-gold text-white font-bold text-xs rounded-lg shadow";
+                pharmaBadge.textContent = "✅ Digital Quality at the Source";
+                pharmaBadge.className = "px-3 py-1 bg-gold text-white font-bold text-xs rounded-lg shadow";
+
+                foodStat.textContent = "✅ After U-Cell: 0.4 km walked (-92% Motion/Transport!)";
+                foodStat.className = "text-emerald-700 font-bold";
+                foodBar.style.width = "12%";
+                foodBar.className = "bg-emerald-500 h-full transition-all duration-500";
+
+                pharmaStat.textContent = "✅ After Digital QA: 4 Hours Release (14 Days Saved!)";
+                pharmaStat.className = "text-emerald-400 font-bold";
+                pharmaBar.style.width = "8%";
+                pharmaBar.className = "bg-emerald-400 h-full transition-all duration-500";
+            } else {
+                btn.textContent = "✨ Reveal Both Lean Solutions & Impact";
+                foodBadge.textContent = "👆 Click to Reveal Lean Solution";
+                foodBadge.className = "px-3 py-1 bg-cream hover:bg-gold hover:text-white border border-gold text-charcoal text-xs font-bold rounded-lg transition";
+                pharmaBadge.textContent = "👆 Click to Reveal Lean Solution";
+                pharmaBadge.className = "px-3 py-1 bg-white/15 hover:bg-gold text-white border border-gold text-xs font-bold rounded-lg transition";
+
+                foodStat.textContent = "Current Waste: 5.0 km walked/shift";
+                foodStat.className = "text-red-600 font-bold";
+                foodBar.style.width = "95%";
+                foodBar.className = "bg-red-500 h-full transition-all duration-500";
+
+                pharmaStat.textContent = "Current Waste: 14 Days Frozen WIP (€2M locked)";
+                pharmaStat.className = "text-red-400 font-bold";
+                pharmaBar.style.width = "95%";
+                pharmaBar.className = "bg-red-500 h-full transition-all duration-500";
+            }
+        };
+
+        // ==========================================
+        // SLIDE 14, 15, 16: LEADING/LAGGING & KPI TREES
+        // ==========================================
+        window.setIllusionCase = function(key) {
+            ['bakery', 'social', 'pizzeria'].forEach(k => {
+                document.getElementById(`ill-btn-${k}`).className = (k === key)
+                    ? "px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg"
+                    : "px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg";
+            });
+            const lag = document.getElementById('ill-lagging-ex');
+            const lead = document.getElementById('ill-leading-ex');
+            if (key === 'bakery') {
+                lag.innerHTML = `🥖 <strong>Bakery Lagging Outcome:</strong> Quarterly Net Profit Margin (+2% Goal) &amp; Monthly Flour COGS.`;
+                lead.innerHTML = `🥖 <strong>Bakery Leading Input:</strong> Dough-cutter blade calibration every 2 hrs &amp; loaf weight variance (&lt; 2g overweight).`;
+            } else if (key === 'social') {
+                lag.innerHTML = `📱 <strong>Social Media Lagging Outcome:</strong> Return on Ad Spend (ROAS) &amp; Total New Customers Acquired after 30 days.`;
+                lead.innerHTML = `📱 <strong>Social Media Leading Input:</strong> Weekly Video Reel Publishing Cadence &amp; 3-Second Hook Hold Rate (%) today.`;
+            } else {
+                lag.innerHTML = `🍕 <strong>Pizzeria Lagging Outcome:</strong> Monthly TripAdvisor Rating &amp; End-of-Month Restaurant EBITDA.`;
+                lead.innerHTML = `🍕 <strong>Pizzeria Leading Input:</strong> Wood-oven temperature (450°C) &amp; Ticket Flow Time (&lt; 12 mins during lunch rush).`;
+            }
+        };
+
+        const treeNotes = {
+            profit: `🏆 <strong>Strategic Goal (Lagging): Net Profit Margin (+2%)</strong> — The CEO's mandate. Operators cannot touch this directly; it is the result of Revenue minus COGS.`,
+            rev: `📈 <strong>Revenue Branch:</strong> Driven by Units Sold × Average Selling Price. Operations supports Revenue by preventing stockouts and reducing Cycle Time.`,
+            cogs: `💶 <strong>Cost of Goods Sold (COGS) Branch:</strong> Driven by Raw Material Flour Usage, Scrap Rate, and Direct Labor Efficiency.`,
+            setup: `🔧 <strong>Leading Indicator 1 — Machine Setup Time (SMED):</strong> Cutting blade changeover time from 45 mins to 10 mins increases Effective Capacity and reduces costly overtime!`,
+            availability: `🛒 <strong>On-Shelf Availability %:</strong> Delivering fresh loaves before 7:00 AM ensures zero lost sales at supermarkets.`,
+            scrap: `🎯 <strong>Leading Indicator 2 — Dough Scrap &amp; Overweight %:</strong> If the operator keeps loaf weight at 500g instead of 515g, the bakery saves 1,500 kg of flour every single day — directly hitting the +2% Net Profit goal!`,
+            overtime: `⏱️ <strong>Unplanned Overtime Hours:</strong> Eliminating bottlenecks and machine breakdowns prevents expensive night-shift overtime.`
+        };
+
+        window.selectTreeBranch = function(node) {
+            document.getElementById('kpi-tree-node-info').innerHTML = treeNotes[node];
+        };
+
+        let bakeryRevealed = false;
+        window.toggleBakeryReveal = function() {
+            bakeryRevealed = !bakeryRevealed;
+            const disc = document.getElementById('bakery-discussion-panel');
+            const rev = document.getElementById('bakery-revealed-panel');
+            const btn = document.getElementById('bakery-reveal-btn');
+            if (bakeryRevealed) {
+                disc.classList.add('hidden');
+                rev.classList.remove('hidden');
+                btn.textContent = "🔒 Return to Discussion Prompts (Hide Answer)";
+            } else {
+                rev.classList.add('hidden');
+                disc.classList.remove('hidden');
+                btn.textContent = "🔓 Unlock Dough-Cutter Simulator & Model Solution";
+            }
+        };
+
+        window.updateBakerySim = function() {
+            const wt = parseInt(document.getElementById('bakery-wt').value);
+            const extraGrams = wt - 500;
+            const wastePct = ((extraGrams / 500) * 100).toFixed(1);
+            // 100,000 loaves/day * grams saved = kg saved
+            const kgSaved = Math.round(((515 - wt) * 100000) / 1000);
+            const euroSaved = kgSaved * 1.6; // €1.60 per kg of specialty dough/ingredients
+            const marginLift = ((515 - wt) * 0.15).toFixed(2);
+
+            document.getElementById('bakery-wt-lbl').textContent = `${wt}g/loaf (${wastePct}% Over-weight Waste)`;
+            document.getElementById('bakery-flour').textContent = `${kgSaved.toLocaleString()} kg / day`;
+            document.getElementById('bakery-cogs').textContent = `€${Math.round(euroSaved).toLocaleString()} / day`;
+            const mEl = document.getElementById('bakery-margin');
+            mEl.textContent = `+${marginLift}%`;
+            mEl.className = parseFloat(marginLift) >= 2.0 ? "text-sm font-extrabold text-emerald-400" : "text-sm font-extrabold text-white";
+        };
+
+        // ==========================================
+        // ENRICHMENT MODAL & 17-SLIDE GRID
+        // ==========================================
+        // ENRICHMENT MODAL & 16-SLIDE GRID
+        // ==========================================
+        window.openEnrichment = function(tab) {
+            const data = window.slideEnrichment[window.currentSlide];
+            document.getElementById('enrichment-overlay').classList.remove('hidden');
+            document.getElementById('modal-title').textContent = data.title;
+            const badge = document.getElementById('modal-category-badge');
+            const body = document.getElementById('modal-body');
+
+            ['quote', 'tool', 'syllabus'].forEach(t => {
+                document.getElementById(`modal-tab-${t}`).className = (t === tab)
+                    ? "px-3 py-1.5 rounded-lg text-xs font-bold bg-gold text-white shadow"
+                    : "px-3 py-1.5 rounded-lg text-xs font-bold bg-cream text-charcoal hover:bg-gray-200";
+            });
+
+            if (tab === 'quote') {
+                badge.textContent = "💬 EXECUTIVE QUOTE & ACADEMIC CITATION";
+                body.innerHTML = `<blockquote class="p-4 rounded-xl bg-cream border-l-4 border-gold italic text-base text-charcoal font-medium">${data.quote}</blockquote><div class="p-3 rounded-xl bg-white border border-gray-200 text-xs text-gray-700"><strong class="text-gold uppercase block mb-1">📚 Academic Citation:</strong>${data.citation}</div>`;
+            } else if (tab === 'tool') {
+                badge.textContent = `🛠️ ENTERPRISE SOFTWARE INSPECTOR • ${data.toolName.toUpperCase()}`;
+                body.innerHTML = `<div class="p-4 rounded-xl bg-charcoal text-white border-l-4 border-gold space-y-2"><div class="text-xs font-bold text-gold uppercase">${data.pacing}</div><p class="text-sm text-gray-100">${data.toolHtml}</p></div>`;
+            } else {
+                badge.textContent = "🎓 ROME BUSINESS SCHOOL SYLLABUS (REV. 2.0)";
+                body.innerHTML = `<div class="p-4 rounded-xl bg-goldlight border border-gold text-charcoal space-y-2"><p class="text-sm">${data.ilo}</p><p class="text-xs text-gray-600 pt-2 border-t border-gold/20"><strong>3-Hour Pacing Slot:</strong> ${data.pacing}</p></div>`;
+            }
+        };
+
+        window.closeEnrichment = function() {
+            document.getElementById('enrichment-overlay').classList.add('hidden');
+        };
+
+        window.toggleSlideGrid = function() {
+            const grid = document.getElementById('slide-grid-overlay');
+            grid.classList.toggle('hidden');
+            if (!grid.classList.contains('hidden')) {
+                document.getElementById('slide-grid-cards').innerHTML = window.slideEnrichment.map((s, idx) => `
+                    <div onclick="window.jumpToSlide(${idx}); window.toggleSlideGrid();" class="p-3.5 rounded-xl cursor-pointer transition border ${idx === window.currentSlide ? 'bg-gold text-white border-white' : 'bg-white/10 hover:bg-white/20 text-white border-white/10'}">
+                        <div class="flex justify-between text-[10px] font-bold ${idx === window.currentSlide ? 'text-white' : 'text-gold'} mb-1">
+                            <span>SLIDE ${idx + 1}</span><span>${s.pacing.split('•')[0]}</span>
+                        </div>
+                        <div class="font-bold text-xs md:text-sm mb-1">${s.title.replace(/^\d+\.\s*/, '')}</div>
+                        <div class="text-[11px] opacity-80">🛠️ ${s.toolName}</div>
+                    </div>
+                `).join('');
+            }
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+            if (e.key === 'Escape') {
+                window.closeEnrichment();
+                document.getElementById('slide-grid-overlay').classList.add('hidden');
+            }
+            if (e.key === 'ArrowRight' || e.key === 'PageDown') window.changeSlide(1);
+            if (e.key === 'ArrowLeft' || e.key === 'PageUp') window.changeSlide(-1);
+            if (e.key === 'q' || e.key === 'Q') window.openEnrichment('quote');
+            if (e.key === 't' || e.key === 'T') window.openEnrichment('tool');
+            if (e.key === 's' || e.key === 'S') window.openEnrichment('syllabus');
+            if (e.key === 'g' || e.key === 'G') window.toggleSlideGrid();
+
+            // Central Slide Stage Zoom via + and - keys (and 0 to reset)
+            if (e.key === '+' || e.key === '=' || e.code === 'NumpadAdd') {
+                e.preventDefault();
+                window.adjustStageZoom(10);
+            }
+            if (e.key === '-' || e.key === '_' || e.code === 'NumpadSubtract') {
+                e.preventDefault();
+                window.adjustStageZoom(-10);
+            }
+            if (e.key === '0' || e.code === 'Numpad0') {
+                e.preventDefault();
+                window.adjustStageZoom(0);
+            }
+        });
+
+        window.onload = () => {
+            window.jumpToSlide(0);
+        };
+    </script>
+</body>
+</html>
