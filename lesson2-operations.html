@@ -239,25 +239,18 @@
                 </div>
 
                 <!-- Right: Split SVG matching Lesson 2 Slide 1 -->
-                <div class="lg:col-span-3 bg-white rounded-xl overflow-hidden border-2 border-gold shadow-lg">
-                    <svg viewBox="0 0 260 155" class="w-full h-36">
-                        <rect x="0" y="0" width="130" height="155" fill="#E2E8F0"/>
-                        <circle cx="30" cy="28" r="14" fill="#F8FAFC"/>
-                        <line x1="25" y1="140" x2="25" y2="20" stroke="#D97706" stroke-width="4"/>
-                        <line x1="15" y1="25" x2="115" y2="25" stroke="#D97706" stroke-width="3.5"/>
-                        <rect x="42" y="65" width="75" height="75" fill="none" stroke="#1E293B" stroke-width="3"/>
-                        <line x1="42" y1="90" x2="117" y2="90" stroke="#1E293B" stroke-width="2.5"/>
-                        <rect x="6" y="132" width="115" height="16" rx="3" fill="#475569"/>
-                        <text x="64" y="143" text-anchor="middle" fill="#CBD5E1" font-size="7.5" font-weight="bold">LESSON 1: BUILT IT</text>
-                        <line x1="130" y1="0" x2="130" y2="155" stroke="#111" stroke-width="3"/>
-                        <rect x="130" y="0" width="130" height="155" fill="#FFFBEB"/>
-                        <rect x="148" y="25" width="95" height="50" rx="5" fill="#1E293B" stroke="#E89D00" stroke-width="2"/>
-                        <text x="195" y="44" text-anchor="middle" fill="#E89D00" font-size="9" font-weight="bold">I = R × T</text>
-                        <text x="195" y="60" text-anchor="middle" fill="#6EE7B7" font-size="8" font-weight="bold">THROUGHPUT: 98%</text>
-                        <polygon points="140,125 255,125 260,155 130,155" fill="#FDE68A"/>
-                        <rect x="138" y="132" width="115" height="16" rx="3" fill="#E89D00"/>
-                        <text x="195" y="143" text-anchor="middle" fill="#FFF" font-size="7.5" font-weight="bold">LESSON 2: RUN ENGINE</text>
-                    </svg>
+                <div class="lg:col-span-3 bg-black/40 rounded-xl border border-gold/50 p-3.5 flex flex-col justify-between gap-2.5 shadow-lg">
+                    <div class="p-2.5 rounded-lg bg-white/10 border-l-4 border-gray-400 opacity-85">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Lesson 1 Complete</div>
+                        <div class="text-sm font-extrabold text-white">🏗️ Built the Engine</div>
+                        <div class="text-[11px] text-gray-300">Charter, WBS, CPM &amp; Agile</div>
+                    </div>
+                    <div class="text-center text-xs font-bold text-gold">▼ Now Live ▼</div>
+                    <div class="p-2.5 rounded-lg bg-gold text-charcoal">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-charcoal/80">Lesson 2 Focus</div>
+                        <div class="text-sm font-extrabold text-charcoal">⚡ Run &amp; Optimize</div>
+                        <div class="text-[11px] text-charcoal/90 font-bold">I = R × T • Bottlenecks • Lean</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -324,6 +317,7 @@
                                 <button onclick="window.setOpsProfile('ryanair')" id="prof-ryanair" class="px-2.5 py-1 bg-gold text-white text-xs font-bold rounded">✈️ Ryanair</button>
                                 <button onclick="window.setOpsProfile('ferrari')" id="prof-ferrari" class="px-2.5 py-1 bg-white/10 text-white text-xs font-bold rounded">🏎️ Ferrari</button>
                                 <button onclick="window.setOpsProfile('amazon')" id="prof-amazon" class="px-2.5 py-1 bg-white/10 text-white text-xs font-bold rounded">📦 Amazon Prime</button>
+                                <button onclick="window.setOpsProfile('netflix')" id="prof-netflix" class="px-2.5 py-1 bg-white/10 text-white text-xs font-bold rounded">🎨 Netflix Cloud</button>
                             </div>
                         </div>
 
@@ -478,6 +472,7 @@
                     <button onclick="window.setFlowIndustry('er')" id="flow-ind-er" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🏥 Hospital ER</button>
                     <button onclick="window.setFlowIndustry('pharma')" id="flow-ind-pharma" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🧬 Pharma Plant</button>
                     <button onclick="window.setFlowIndustry('loan')" id="flow-ind-loan" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🏦 Loan Startup</button>
+                    <button onclick="window.setFlowIndustry('brand')" id="flow-ind-brand" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">📣 Brand Agency</button>
                 </div>
             </div>
 
@@ -1312,6 +1307,8 @@
                     <button onclick="window.setIllusionCase('bakery')" id="ill-btn-bakery" class="px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg">🥖 Commercial Bakery</button>
                     <button onclick="window.setIllusionCase('social')" id="ill-btn-social" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">📱 Social Media Campaign</button>
                     <button onclick="window.setIllusionCase('pizzeria')" id="ill-btn-pizzeria" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🍕 Roman Pizzeria</button>
+                    <button onclick="window.setIllusionCase('pharma')" id="ill-btn-pharma" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">💊 Pharma</button>
+                    <button onclick="window.setIllusionCase('legal')" id="ill-btn-legal" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">⚖️ Law & Banking</button>
                 </div>
             </div>
 
@@ -1988,11 +1985,11 @@
             if (idx === 0) window.setOpsProfile('ryanair');
             if (idx === 1) window.setOpsProfile('ferrari');
             if (idx === 2) window.setOpsProfile('amazon');
-            if (idx === 3) window.setOpsProfile('ferrari');
+            if (idx === 3) window.setOpsProfile('netflix');
         };
 
         window.setOpsProfile = function(prof) {
-            ['ryanair', 'ferrari', 'amazon'].forEach(p => {
+            ['ryanair', 'ferrari', 'amazon', 'netflix'].forEach(p => {
                 document.getElementById(`prof-${p}`).className = (p === prof)
                     ? "px-2.5 py-1 bg-gold text-white text-xs font-bold rounded"
                     : "px-2.5 py-1 bg-white/10 text-white text-xs font-bold rounded";
@@ -2009,12 +2006,18 @@
                 document.getElementById('bar-spd').style.width = '25%'; document.getElementById('bar-spd-lbl').textContent = '25% (18-Month Waitlist)';
                 document.getElementById('bar-flex').style.width = '95%'; document.getElementById('bar-flex-lbl').textContent = '95% (Tailor-Made Atelier)';
                 document.getElementById('ops-profile-note').innerHTML = `🏎️ <strong>Ferrari Maranello's Trade-off:</strong> Competes on <strong>100% Quality</strong> and <strong>95% Tailor-Made Flexibility</strong>, intentionally sacrificing <strong>Speed</strong> (customers wait 18–24 months) and <strong>Unit Cost</strong>.`;
-            } else {
+            } else if (prof === 'amazon') {
                 document.getElementById('bar-cost').style.width = '75%'; document.getElementById('bar-cost-lbl').textContent = '75% (Robotic Scale)';
                 document.getElementById('bar-qual').style.width = '85%'; document.getElementById('bar-qual-lbl').textContent = '85% (99.9% Order Accuracy)';
                 document.getElementById('bar-spd').style.width = '99%'; document.getElementById('bar-spd-lbl').textContent = '99% (Same-Day Prime)';
                 document.getElementById('bar-flex').style.width = '90%'; document.getElementById('bar-flex-lbl').textContent = '90% (100M+ SKUs)';
                 document.getElementById('ops-profile-note').innerHTML = `📦 <strong>Amazon Prime Fulfillment:</strong> Invests billions in Kiva warehouse robotics and predictive regional inventory to dominate <strong>Speed (Same-Day Delivery)</strong> and <strong>Variety Flexibility</strong>.`;
+            } else {
+                document.getElementById('bar-cost').style.width = '65%'; document.getElementById('bar-cost-lbl').textContent = '65% (Cloud Elastic Scaling)';
+                document.getElementById('bar-qual').style.width = '80%'; document.getElementById('bar-qual-lbl').textContent = '80% (4K Adaptive Streaming)';
+                document.getElementById('bar-spd').style.width = '88%'; document.getElementById('bar-spd-lbl').textContent = '88% (Instant On-Demand)';
+                document.getElementById('bar-flex').style.width = '99%'; document.getElementById('bar-flex-lbl').textContent = '99% (Personalized + Auto-Scale)';
+                document.getElementById('ops-profile-note').innerHTML = `🎨 <strong>Netflix Cloud's Trade-off:</strong> Dominates <strong>99% Flexibility</strong>—handling massive Friday-night traffic spikes automatically on AWS while customizing every user's home screen, trading off higher cloud infrastructure costs.`;
             }
         };
 
@@ -2061,6 +2064,16 @@
                 takt: "🔔 Every 24 mins",
                 ex: ["🏦 1 Loan Application", "🏦 20 Apps / day", "🏦 5 Days to Approve", "🏦 100 Apps in WIP", "🏦 480m ÷ 20 = 24 mins/app"],
                 box: `🏦 <strong>FinTech Loan Translation (Slide 8 Preview):</strong> The startup receives <strong>20 loan applications/day</strong> (Flow Rate) and each takes <strong>5 days</strong> (Flow Time) to underwrite, leaving <strong>100 applications</strong> (Inventory) sitting on desks!`
+            },
+            brand: {
+                title: "ACTIVE CASE: GLOBAL BRAND & MARKETING AGENCY",
+                u: "📣 1 Campaign Asset",
+                r: "12 Assets / week",
+                t: "2 Weeks (10 Days)",
+                i: "24 Briefs in WIP",
+                takt: "🔔 Every 3.3 hrs",
+                ex: ["📣 1 Campaign Asset", "📣 12 Assets / week", "📣 2 Weeks Lead Time", "📣 24 Briefs in WIP", "📣 40h ÷ 12 = 3.3 hrs/asset"],
+                box: `📣 <strong>Brand & Marketing Translation:</strong> Every <strong>Campaign Asset</strong> (Flow Unit) takes <strong>2 weeks</strong> (Flow Time) from brief to legal sign-off. The agency ships <strong>12 assets/week</strong> (Flow Rate), leaving <strong>24 active briefs</strong> (Inventory) in progress (Bottleneck = Legal/Brand Approval!).`
             }
         };
 
@@ -2076,7 +2089,7 @@
             for (let i = 0; i < 5; i++) {
                 document.getElementById(`fm-ex-${i}`).textContent = d.ex[i];
             }
-            ['pizza', 'er', 'pharma', 'loan'].forEach(k => {
+            ['pizza', 'er', 'pharma', 'loan', 'brand'].forEach(k => {
                 document.getElementById(`flow-ind-${k}`).className = (k === key)
                     ? "px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg shadow"
                     : "px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg";
@@ -2359,22 +2372,31 @@
         // SLIDE 14, 15, 16: LEADING/LAGGING & KPI TREES
         // ==========================================
         window.setIllusionCase = function(key) {
-            ['bakery', 'social', 'pizzeria'].forEach(k => {
-                document.getElementById(`ill-btn-${k}`).className = (k === key)
-                    ? "px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg"
-                    : "px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg";
+            ['bakery', 'social', 'pizzeria', 'pharma', 'legal'].forEach(k => {
+                const el = document.getElementById(`ill-btn-${k}`);
+                if (el) {
+                    el.className = (k === key)
+                        ? "px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg"
+                        : "px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg";
+                }
             });
             const lag = document.getElementById('ill-lagging-ex');
             const lead = document.getElementById('ill-leading-ex');
             if (key === 'bakery') {
-                lag.innerHTML = `🥖 <strong>Bakery Lagging Outcome:</strong> Quarterly Net Profit Margin (+2% Goal) &amp; Monthly Flour COGS.`;
-                lead.innerHTML = `🥖 <strong>Bakery Leading Input:</strong> Dough-cutter blade calibration every 2 hrs &amp; loaf weight variance (&lt; 2g overweight).`;
+                lag.innerHTML = `🥖 <strong>Bakery Lagging Outcome:</strong> Quarterly Net Profit Margin (+2% Goal) & Monthly Flour COGS.`;
+                lead.innerHTML = `🥖 <strong>Bakery Leading Input:</strong> Dough-cutter blade calibration every 2 hrs & loaf weight variance (< 2g overweight).`;
             } else if (key === 'social') {
-                lag.innerHTML = `📱 <strong>Social Media Lagging Outcome:</strong> Return on Ad Spend (ROAS) &amp; Total New Customers Acquired after 30 days.`;
-                lead.innerHTML = `📱 <strong>Social Media Leading Input:</strong> Weekly Video Reel Publishing Cadence &amp; 3-Second Hook Hold Rate (%) today.`;
+                lag.innerHTML = `📱 <strong>Brand & Marketing Lagging Outcome:</strong> Return on Ad Spend (ROAS) & Brand Awareness Lift after 30 days.`;
+                lead.innerHTML = `📱 <strong>Brand & Marketing Leading Input:</strong> Weekly Creative Testing Velocity & 3-Second Video Hook Hold Rate (%) today.`;
+            } else if (key === 'pizzeria') {
+                lag.innerHTML = `🍕 <strong>Pizzeria Lagging Outcome:</strong> Monthly TripAdvisor Rating & End-of-Month Restaurant EBITDA.`;
+                lead.innerHTML = `🍕 <strong>Pizzeria Leading Input:</strong> Wood-oven temperature (450°C) & Ticket Flow Time (< 12 mins during lunch rush).`;
+            } else if (key === 'pharma') {
+                lag.innerHTML = `💊 <strong>Pharma Lagging Outcome:</strong> Annual FDA/EMA Batch Approval Rate & Quarterly Cost of Scrap.`;
+                lead.innerHTML = `💊 <strong>Pharma Leading Input:</strong> Real-time Bioreactor Sterility Sensor Alerts & Digital QA Sign-off Time (< 4 hrs).`;
             } else {
-                lag.innerHTML = `🍕 <strong>Pizzeria Lagging Outcome:</strong> Monthly TripAdvisor Rating &amp; End-of-Month Restaurant EBITDA.`;
-                lead.innerHTML = `🍕 <strong>Pizzeria Leading Input:</strong> Wood-oven temperature (450°C) &amp; Ticket Flow Time (&lt; 12 mins during lunch rush).`;
+                lag.innerHTML = `⚖️ <strong>Law & Banking Lagging Outcome:</strong> Annual Regulatory Fines (€0 target) & Quarterly Client Retention Rate.`;
+                lead.innerHTML = `⚖️ <strong>Law & Banking Leading Input:</strong> Daily KYC/AML File Completeness (%) & Contract Redline Turnaround Time (< 24 hrs).`;
             }
         };
 
