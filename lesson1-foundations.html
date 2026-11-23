@@ -335,6 +335,15 @@
                             <span class="text-[11px] text-gray-300">Click any curve node (1–4)</span>
                         </div>
 
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2 text-[11px]">
+                            <div class="px-2.5 py-1.5 rounded-lg bg-white/5 border-l-4 border-gold text-gray-200">
+                                <strong class="text-gold">Project Mgmt (Technical Change):</strong> Changes structure, roles, processes &amp; systems.
+                            </div>
+                            <div class="px-2.5 py-1.5 rounded-lg bg-white/5 border-l-4 border-emerald-400 text-gray-200">
+                                <strong class="text-emerald-300">Change Mgmt (People Change):</strong> Helps people adapt so the project reaches ROI.
+                            </div>
+                        </div>
+
                         <div class="bg-black/30 rounded-xl p-3 border border-white/10">
                             <svg viewBox="0 0 500 140" class="w-full h-32">
                                 <line x1="40" y1="12" x2="40" y2="122" stroke="#666" stroke-width="1"/>
@@ -639,46 +648,82 @@
                     </div>
                 </div>
 
-                <!-- Right: Interactive RACI Matrix Simulator -->
+                <!-- Right: Interactive RACI Matrix & Org Structure Switcher -->
                 <div class="lg:col-span-6 rbs-card-dark p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="text-xs font-bold uppercase tracking-widest text-gold mb-1">INTERACTIVE RACI MATRIX CHECKER</div>
-                        <h3 class="text-base font-bold text-white mb-2">R = Responsible | A = Accountable | C = Consulted | I = Informed</h3>
-
-                        <table class="w-full text-xs text-left border-collapse bg-black/30 rounded-lg overflow-hidden">
-                            <thead>
-                                <tr class="bg-gold text-charcoal font-bold">
-                                    <th class="p-2">Deliverable / Decision</th>
-                                    <th class="p-2 text-center">Sponsor</th>
-                                    <th class="p-2 text-center">PM</th>
-                                    <th class="p-2 text-center">Tech Lead</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-white/10">
-                                <tr>
-                                    <td class="p-2 font-semibold">1. Authorize Project Charter</td>
-                                    <td class="p-2 text-center"><span class="px-2 py-0.5 bg-emerald-600 rounded font-bold">A</span></td>
-                                    <td class="p-2 text-center"><span class="px-2 py-0.5 bg-amber-600 rounded font-bold">R</span></td>
-                                    <td class="p-2 text-center">I</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-semibold">2. Build Master WBS Schedule</td>
-                                    <td class="p-2 text-center">I</td>
-                                    <td class="p-2 text-center"><span class="px-2 py-0.5 bg-emerald-600 rounded font-bold">A / R</span></td>
-                                    <td class="p-2 text-center">C</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-semibold">3. Database Migration Code</td>
-                                    <td class="p-2 text-center">I</td>
-                                    <td class="p-2 text-center"><span id="raci-cell-pm" onclick="window.toggleRaciTrap()" class="px-2 py-0.5 bg-emerald-600 rounded font-bold cursor-pointer" title="Click to test RACI Golden Rule">A</span></td>
-                                    <td class="p-2 text-center"><span id="raci-cell-tl" onclick="window.toggleRaciTrap()" class="px-2 py-0.5 bg-amber-600 rounded font-bold cursor-pointer" title="Click to test RACI Golden Rule">R</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- Top Tab Switcher -->
+                    <div class="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-white/15">
+                        <span class="text-xs font-bold uppercase tracking-widest text-gold" id="s5-right-label">INTERACTIVE RACI MATRIX</span>
+                        <div class="flex gap-1.5">
+                            <button onclick="window.switchSlide5Tab('raci')" id="s5-tab-raci" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-gold text-white shadow transition">📊 RACI Matrix</button>
+                            <button onclick="window.switchSlide5Tab('org')" id="s5-tab-org" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white/10 hover:bg-white/20 text-gray-200 transition">🏛️ Functional vs. Matrix</button>
+                        </div>
                     </div>
 
-                    <div id="raci-feedback" class="mt-3 p-3 rounded-xl bg-white/10 border-l-4 border-gold text-xs text-gray-200">
-                        💡 <strong>The Golden Rule of RACI:</strong> Every row can have multiple <strong>R</strong>'s (people doing the work), but <strong>ONLY ONE "A" (Accountable)</strong>! Click Row 3's <span class="underline cursor-pointer text-gold" onclick="window.toggleRaciTrap()">A / R badges</span> to see what happens when two people are Accountable.
+                    <!-- TAB 1: EXISTING RACI MATRIX -->
+                    <div id="s5-panel-raci" class="flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold text-white mb-2">R = Responsible | A = Accountable | C = Consulted | I = Informed</h3>
+                            <table class="w-full text-xs text-left border-collapse bg-black/30 rounded-lg overflow-hidden">
+                                <thead>
+                                    <tr class="bg-gold text-charcoal font-bold">
+                                        <th class="p-2">Deliverable / Decision</th>
+                                        <th class="p-2 text-center">Sponsor</th>
+                                        <th class="p-2 text-center">PM</th>
+                                        <th class="p-2 text-center">Tech Lead</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/10">
+                                    <tr>
+                                        <td class="p-2 font-semibold">1. Authorize Project Charter</td>
+                                        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-emerald-600 rounded font-bold">A</span></td>
+                                        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-amber-600 rounded font-bold">R</span></td>
+                                        <td class="p-2 text-center">I</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 font-semibold">2. Build Master WBS Schedule</td>
+                                        <td class="p-2 text-center">I</td>
+                                        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-emerald-600 rounded font-bold">A / R</span></td>
+                                        <td class="p-2 text-center">C</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 font-semibold">3. Database Migration Code</td>
+                                        <td class="p-2 text-center">I</td>
+                                        <td class="p-2 text-center"><span id="raci-cell-pm" onclick="window.toggleRaciTrap()" class="px-2 py-0.5 bg-emerald-600 rounded font-bold cursor-pointer" title="Click to test RACI Golden Rule">A</span></td>
+                                        <td class="p-2 text-center"><span id="raci-cell-tl" onclick="window.toggleRaciTrap()" class="px-2 py-0.5 bg-amber-600 rounded font-bold cursor-pointer" title="Click to test RACI Golden Rule">R</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="raci-feedback" class="mt-3 p-3 rounded-xl bg-white/10 border-l-4 border-gold text-xs text-gray-200">
+                            💡 <strong>The Golden Rule of RACI:</strong> Every row can have multiple <strong>R</strong>'s (people doing the work), but <strong>ONLY ONE "A" (Accountable)</strong>! Click Row 3's <span class="underline cursor-pointer text-gold" onclick="window.toggleRaciTrap()">A / R badges</span> to see what happens when two people are Accountable.
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: FUNCTIONAL VS. MATRIX STRUCTURE TRADE-OFF -->
+                    <div id="s5-panel-org" class="hidden flex-grow flex flex-col justify-between">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div class="p-3 rounded-xl bg-black/30 border border-white/15 space-y-2">
+                                <div class="font-extrabold text-gold text-sm">🏢 Functional Structure</div>
+                                <div class="text-[11px] text-gray-300">Grouped by specialty (Finance, IT, HR, Production).</div>
+                                <div class="space-y-1 text-[11px]">
+                                    <div class="text-emerald-300"><strong>✓ Pros:</strong> Economies of scale, deep expertise, clear single-boss control.</div>
+                                    <div class="text-red-300"><strong>✗ Cons:</strong> Rigid silos, slow cross-team decisions, weak PM authority.</div>
+                                </div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-black/30 border border-gold/60 space-y-2">
+                                <div class="font-extrabold text-emerald-300 text-sm">🕸️ Matrix Structure</div>
+                                <div class="text-[11px] text-gray-300">Cross-functional teams (Projects × Functions / Regions).</div>
+                                <div class="space-y-1 text-[11px]">
+                                    <div class="text-emerald-300"><strong>✓ Pros:</strong> Faster innovation, shared specialists across projects.</div>
+                                    <div class="text-amber-300"><strong>✗ Cons:</strong> Dual reporting ("two bosses") &amp; competing priorities.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 p-3 rounded-xl bg-white/10 border-l-4 border-gold text-xs text-gray-200">
+                            🎯 <strong>Why This Matters for PMs:</strong> In a <strong>Matrix</strong> organization, engineers report to both their Functional Manager and the PM—which is exactly why a signed <strong>Project Charter</strong> and a single <strong>"A" in RACI</strong> are non-negotiable!
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1031,8 +1076,44 @@
                             </p>
                         </div>
                     </div>
-                    <div class="text-xs text-gray-500 mt-3 pt-2 border-t">
-                        💡 Remember: If Time and Cost are locked, adding Scope without cutting existing Scope breaks Quality!
+                    <div class="mt-3 pt-2.5 border-t space-y-2">
+                        <div class="flex items-center justify-between gap-2 text-xs text-gray-500">
+                            <span>💡 Locked Time + Cost = you must trade Scope to protect Quality!</span>
+                            <button onclick="window.toggleParkingLot()" id="parking-lot-btn" class="px-2.5 py-1 bg-charcoal hover:bg-gold text-white font-bold text-[11px] rounded-lg shrink-0 transition">
+                                🅿️ Parking Lot Log ▾
+                            </button>
+                        </div>
+
+                        <div id="lab1-parking-lot" class="hidden p-2.5 rounded-xl bg-cream border border-gold/50 text-[11px]">
+                            <div class="font-extrabold text-gold uppercase tracking-wider mb-1.5">🅿️ Consulting Tool: Scope Parking Lot (Phase 2 Backlog)</div>
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-gold/40 text-charcoal font-bold">
+                                        <th class="py-1 pr-1.5">Request</th>
+                                        <th class="py-1 pr-1.5">Deliverable</th>
+                                        <th class="py-1 pr-1.5">Timeline</th>
+                                        <th class="py-1 pr-1.5">Owner</th>
+                                        <th class="py-1">Key Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gold/20 text-charcoal">
+                                    <tr>
+                                        <td class="py-1 pr-1.5 font-semibold">Legacy PDF Reports</td>
+                                        <td class="py-1 pr-1.5">Export module</td>
+                                        <td class="py-1 pr-1.5">Phase 2 (Q3)</td>
+                                        <td class="py-1 pr-1.5">Ops Lead</td>
+                                        <td class="py-1">Keep manual CSV until Q3</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-1 pr-1.5 font-semibold">Full AI Training</td>
+                                        <td class="py-1 pr-1.5">ML Fraud v2</td>
+                                        <td class="py-1 pr-1.5">Q3 Budget</td>
+                                        <td class="py-1 pr-1.5">CTO / Sponsor</td>
+                                        <td class="py-1">Submit Phase-2 Business Case</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -2057,10 +2138,10 @@
         // SLIDE 2: GUARANTEED WORKING DOMAIN CARDS & TABS
         // ==========================================
         const changeStageDescriptions = [
-            "<strong>1. Project Initiation & Delivery ('Muscle Building'):</strong> While Operations run at the old status quo baseline, a temporary Project team is chartered to build a unique capability.",
-            "<strong>2. Shock & Disruption Dip ('Valley of Despair'):</strong> At Go-Live, productivity temporarily dips below the old baseline as employees face unfamiliar workflows and learning curves.",
-            "<strong>3. Change Management (Prosci ADKAR Adoption):</strong> Structured training, coaching, and executive sponsorship help staff overcome resistance and climb out of the valley.",
-            "<strong>4. New Status Quo — Operations Management ('The Heartbeat'):</strong> The Project formally closes and hands over the baton. Operations now runs the upgraded process daily at a higher performance plateau!"
+            "<strong>1. Project Muscle & Denial Phase:</strong> While Operations run at baseline, a Project builds the new capability. <span class='inline-block mt-1 px-2 py-0.5 bg-gold/20 text-gold font-bold rounded'>Leader Action: INFORM</span> — Clearly communicate the 'why' and business rationale early.",
+            "<strong>2. Disruption Dip & Resistance Phase:</strong> At Go-Live, productivity dips as staff lose familiarity and comfort. <span class='inline-block mt-1 px-2 py-0.5 bg-red-500/20 text-red-300 font-bold rounded'>Leader Action: LISTEN</span> — Address fears, gather feedback, and remove friction.",
+            "<strong>3. ADKAR Change & Exploration Phase:</strong> Structured training and coaching help teams test the new way of working. <span class='inline-block mt-1 px-2 py-0.5 bg-amber-500/20 text-amber-300 font-bold rounded'>Leader Action: DISCUSS</span> — Coach teams, clarify roles, and co-solve bottlenecks.",
+            "<strong>4. New Operations & Acceptance Phase:</strong> Operations locks in the higher performance plateau through daily routines. <span class='inline-block mt-1 px-2 py-0.5 bg-emerald-500/20 text-emerald-300 font-bold rounded'>Leader Action: REWARD</span> — Recognize early adopters and reinforce the new status quo."
         ];
 
         window.switchSlide2Tab = function(tab) {
@@ -2269,6 +2350,29 @@
             }
         };
 
+        window.switchSlide5Tab = function(tab) {
+            const raciPanel = document.getElementById('s5-panel-raci');
+            const orgPanel = document.getElementById('s5-panel-org');
+            const btnRaci = document.getElementById('s5-tab-raci');
+            const btnOrg = document.getElementById('s5-tab-org');
+            const label = document.getElementById('s5-right-label');
+            if (!raciPanel || !orgPanel) return;
+
+            if (tab === 'raci') {
+                raciPanel.classList.remove('hidden');
+                orgPanel.classList.add('hidden');
+                btnRaci.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-gold text-white shadow transition";
+                btnOrg.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-white/10 hover:bg-white/20 text-gray-200 transition";
+                if (label) label.textContent = "INTERACTIVE RACI MATRIX";
+            } else {
+                orgPanel.classList.remove('hidden');
+                raciPanel.classList.add('hidden');
+                btnOrg.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-gold text-white shadow transition";
+                btnRaci.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-white/10 hover:bg-white/20 text-gray-200 transition";
+                if (label) label.textContent = "ORG DESIGN & PM AUTHORITY";
+            }
+        };
+
         // ==========================================
         // SLIDE 6: ORIGINS & IRON TRIANGLE
         // ==========================================
@@ -2402,6 +2506,14 @@
 
         window.evaluateLab1 = function(idx) {
             document.getElementById('lab1-outcome').innerHTML = lab1Results[idx];
+        };
+
+        window.toggleParkingLot = function() {
+            const el = document.getElementById('lab1-parking-lot');
+            const btn = document.getElementById('parking-lot-btn');
+            if (!el || !btn) return;
+            el.classList.toggle('hidden');
+            btn.textContent = el.classList.contains('hidden') ? '🅿️ Parking Lot Log ▾' : '🅿️ Hide Parking Lot ▴';
         };
 
         window.loadCoffeeShopSample = function() {

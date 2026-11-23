@@ -584,9 +584,9 @@
                     <p class="text-xs md:text-sm text-charcoal font-medium">Understanding Theoretical Maximums vs. Operational Truths</p>
                 </div>
                 <div class="flex gap-1.5 mt-2 md:mt-0">
-                    <button onclick="window.loadCapacityPreset(100, 82, 74, '👕 Shirt Factory (Slide Example)')" class="px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg">👕 Shirt Factory</button>
-                    <button onclick="window.loadCapacityPreset(60, 48, 42, '🍕 Wood-Fired Pizza Oven')" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🍕 Pizza Oven</button>
-                    <button onclick="window.loadCapacityPreset(120, 90, 85, '✈️ Airline Fleet')" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">✈️ Airline</button>
+                    <button id="cap-btn-shirt" onclick="window.loadCapacityPreset(100, 82, 74, '👕 Shirt Factory (Slide Example)', 'shirt')" class="px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg shadow">👕 Shirt Factory</button>
+                    <button id="cap-btn-pizza" onclick="window.loadCapacityPreset(60, 48, 42, '🍕 Wood-Fired Pizza Oven', 'pizza')" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">🍕 Pizza Oven</button>
+                    <button id="cap-btn-airline" onclick="window.loadCapacityPreset(120, 90, 85, '✈️ Airline Fleet', 'airline')" class="px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg">✈️ Airline</button>
                 </div>
             </div>
 
@@ -1247,7 +1247,7 @@
                         </p>
                         <div class="mt-3 flex items-center gap-2">
                             <strong class="text-gold text-sm md:text-base">Solution:</strong>
-                            <button id="food-sol-badge" onclick="window.toggleMudaBeforeAfter()" class="px-3 py-1 bg-cream hover:bg-gold hover:text-white border border-gold text-charcoal text-xs font-bold rounded-lg transition">
+                            <button id="food-sol-badge" onclick="window.toggleSingleMuda('food')" class="px-3 py-1 bg-cream hover:bg-gold hover:text-white border border-gold text-charcoal text-xs font-bold rounded-lg transition">
                                 👆 Click to Reveal Lean Solution
                             </button>
                         </div>
@@ -1274,7 +1274,7 @@
                         </p>
                         <div class="mt-3 flex items-center gap-2">
                             <strong class="text-gold text-sm md:text-base">Solution:</strong>
-                            <button id="pharma-sol-badge" onclick="window.toggleMudaBeforeAfter()" class="px-3 py-1 bg-white/15 hover:bg-gold text-white border border-gold text-xs font-bold rounded-lg transition">
+                            <button id="pharma-sol-badge" onclick="window.toggleSingleMuda('pharma')" class="px-3 py-1 bg-white/15 hover:bg-gold text-white border border-gold text-xs font-bold rounded-lg transition">
                                 👆 Click to Reveal Lean Solution
                             </button>
                         </div>
@@ -1391,15 +1391,19 @@
                     </div>
                 </div>
 
-                <!-- Right: Interactive Visual KPI Tree Diagram matching Original Slide 12 -->
+                <!-- Right: 2-Tab Visualization (KPI Tree + Impact vs. Effort Prioritization Matrix) -->
                 <div class="lg:col-span-7 rbs-card p-5 bg-white flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">VISUALIZATION (CLICK ANY NODE)</span>
-                            <span class="text-[11px] font-bold text-gray-500">Top = Lagging Financial | Bottom = Leading Operational</span>
+                    <!-- Top Tab Switcher -->
+                    <div class="flex flex-wrap justify-between items-center gap-2 mb-3 pb-2 border-b border-gold/25">
+                        <span id="s15-right-badge" class="px-3 py-1 bg-gold text-white font-bold text-xs uppercase rounded-md">KPI TREE (CLICK ANY NODE)</span>
+                        <div class="flex gap-1.5">
+                            <button onclick="window.switchSlide15Tab('tree')" id="s15-tab-tree" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-gold text-white shadow transition">🌳 KPI Tree</button>
+                            <button onclick="window.switchSlide15Tab('matrix')" id="s15-tab-matrix" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-cream hover:bg-goldlight text-charcoal border border-gold/40 transition">🎯 Impact vs. Effort</button>
                         </div>
+                    </div>
 
-                        <!-- Interactive Hierarchy Tree -->
+                    <!-- TAB 1: EXISTING INTERACTIVE KPI TREE -->
+                    <div id="s15-panel-tree" class="flex-grow flex flex-col justify-center">
                         <div class="bg-cream/60 rounded-xl p-3.5 border border-gold/30 space-y-3 text-center text-xs">
                             <!-- Level 1: Root Strategic Goal -->
                             <div class="flex justify-center">
@@ -1437,6 +1441,43 @@
                                     ⏱️ Overtime Labor Hrs
                                 </button>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: IMPACT VS. EFFORT PRIORITIZATION MATRIX -->
+                    <div id="s15-panel-matrix" class="hidden flex-grow flex flex-col justify-between">
+                        <div class="grid grid-cols-2 gap-2.5 text-xs">
+                            <!-- Top-Left: High Impact / Low Effort -->
+                            <button onclick="window.selectMatrixQuad('quick')" id="mat-q-quick" class="p-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-500 text-left transition">
+                                <div class="text-[10px] font-extrabold uppercase text-emerald-700">High Impact • Low Effort</div>
+                                <div class="font-extrabold text-charcoal text-sm mt-0.5">🚀 Prioritize First (Quick Wins)</div>
+                                <div class="text-[11px] text-gray-700 mt-1">e.g., U-Shaped Kitchen Cell, Kanban WIP Limits, Blade Calibration.</div>
+                            </button>
+
+                            <!-- Top-Right: High Impact / High Effort -->
+                            <button onclick="window.selectMatrixQuad('major')" id="mat-q-major" class="p-3 rounded-xl bg-goldlight hover:bg-amber-100 border-2 border-gold text-left transition">
+                                <div class="text-[10px] font-extrabold uppercase text-gold">High Impact • High Effort</div>
+                                <div class="font-extrabold text-charcoal text-sm mt-0.5">🏗️ Strategic Initiatives</div>
+                                <div class="text-[11px] text-gray-700 mt-1">e.g., €5M Bottleneck Upgrade, Digital eBR QA Platform.</div>
+                            </button>
+
+                            <!-- Bottom-Left: Low Impact / Low Effort -->
+                            <button onclick="window.selectMatrixQuad('fill')" id="mat-q-fill" class="p-3 rounded-xl bg-cream hover:bg-gray-200 border border-gray-300 text-left transition">
+                                <div class="text-[10px] font-extrabold uppercase text-gray-500">Low Impact • Low Effort</div>
+                                <div class="font-extrabold text-charcoal text-sm mt-0.5">📌 Pursue Opportunistically</div>
+                                <div class="text-[11px] text-gray-600 mt-1">e.g., Minor desk 5S tweaks or non-critical report formatting.</div>
+                            </button>
+
+                            <!-- Bottom-Right: Low Impact / High Effort -->
+                            <button onclick="window.selectMatrixQuad('avoid')" id="mat-q-avoid" class="p-3 rounded-xl bg-red-50 hover:bg-red-100 border border-red-300 text-left transition">
+                                <div class="text-[10px] font-extrabold uppercase text-red-600">Low Impact • High Effort</div>
+                                <div class="font-extrabold text-charcoal text-sm mt-0.5">⛔ Do Not Pursue (Traps)</div>
+                                <div class="text-[11px] text-gray-700 mt-1">e.g., Spending €5M to speed up a non-bottleneck step!</div>
+                            </button>
+                        </div>
+
+                        <div class="mt-2.5 text-[11px] text-charcoal bg-cream px-3 py-1.5 rounded-lg border border-gold/30">
+                            💡 <strong>Executive Rule:</strong> Click any quadrant above to inspect how managers sequence Lean &amp; KPI improvements.
                         </div>
                     </div>
                 </div>
@@ -2120,11 +2161,19 @@
         // ==========================================
         // SLIDE 5 & 6: CAPACITY, UTILIZATION, EFFICIENCY
         // ==========================================
-        window.loadCapacityPreset = function(des, eff, act, title) {
+        window.loadCapacityPreset = function(des, eff, act, title, activeKey) {
             document.getElementById('cap-design').value = des;
             document.getElementById('cap-eff').value = eff;
             document.getElementById('cap-act').value = act;
             document.getElementById('cap-preset-title').textContent = title.toUpperCase();
+            ['shirt', 'pizza', 'airline'].forEach(k => {
+                const btn = document.getElementById(`cap-btn-${k}`);
+                if (btn) {
+                    btn.className = (k === activeKey)
+                        ? "px-2.5 py-1 bg-gold text-white text-xs font-bold rounded-lg shadow"
+                        : "px-2.5 py-1 bg-white border border-gold text-charcoal text-xs font-bold rounded-lg";
+                }
+            });
             window.updateCapacityCalc();
         };
 
@@ -2322,50 +2371,63 @@
             }
         };
 
-        let mudaFixed = false;
-        window.toggleMudaBeforeAfter = function() {
-            mudaFixed = !mudaFixed;
-            const btn = document.getElementById('muda-sim-btn');
+        const mudaState = { food: false, pharma: false };
+
+        window.renderMudaCards = function() {
             const foodStat = document.getElementById('food-muda-stat');
             const foodBar = document.getElementById('food-muda-bar');
+            const foodBadge = document.getElementById('food-sol-badge');
             const pharmaStat = document.getElementById('pharma-muda-stat');
             const pharmaBar = document.getElementById('pharma-muda-bar');
-            const foodBadge = document.getElementById('food-sol-badge');
             const pharmaBadge = document.getElementById('pharma-sol-badge');
+            const btn = document.getElementById('muda-sim-btn');
 
-            if (mudaFixed) {
-                btn.textContent = "↺ Hide Solutions & Reset Waste State";
+            if (mudaState.food) {
                 foodBadge.textContent = "✅ The U-Shaped Work Cell";
                 foodBadge.className = "px-3 py-1 bg-gold text-white font-bold text-xs rounded-lg shadow";
-                pharmaBadge.textContent = "✅ Digital Quality at the Source";
-                pharmaBadge.className = "px-3 py-1 bg-gold text-white font-bold text-xs rounded-lg shadow";
-
                 foodStat.textContent = "✅ After U-Cell: 0.4 km walked (-92% Motion/Transport!)";
                 foodStat.className = "text-emerald-700 font-bold";
                 foodBar.style.width = "12%";
                 foodBar.className = "bg-emerald-500 h-full transition-all duration-500";
+            } else {
+                foodBadge.textContent = "👆 Click to Reveal Lean Solution";
+                foodBadge.className = "px-3 py-1 bg-cream hover:bg-gold hover:text-white border border-gold text-charcoal text-xs font-bold rounded-lg transition";
+                foodStat.textContent = "Current Waste: 5.0 km walked/shift";
+                foodStat.className = "text-red-600 font-bold";
+                foodBar.style.width = "95%";
+                foodBar.className = "bg-red-500 h-full transition-all duration-500";
+            }
 
+            if (mudaState.pharma) {
+                pharmaBadge.textContent = "✅ Digital Quality at the Source";
+                pharmaBadge.className = "px-3 py-1 bg-gold text-white font-bold text-xs rounded-lg shadow";
                 pharmaStat.textContent = "✅ After Digital QA: 4 Hours Release (14 Days Saved!)";
                 pharmaStat.className = "text-emerald-400 font-bold";
                 pharmaBar.style.width = "8%";
                 pharmaBar.className = "bg-emerald-400 h-full transition-all duration-500";
             } else {
-                btn.textContent = "✨ Reveal Both Lean Solutions & Impact";
-                foodBadge.textContent = "👆 Click to Reveal Lean Solution";
-                foodBadge.className = "px-3 py-1 bg-cream hover:bg-gold hover:text-white border border-gold text-charcoal text-xs font-bold rounded-lg transition";
                 pharmaBadge.textContent = "👆 Click to Reveal Lean Solution";
                 pharmaBadge.className = "px-3 py-1 bg-white/15 hover:bg-gold text-white border border-gold text-xs font-bold rounded-lg transition";
-
-                foodStat.textContent = "Current Waste: 5.0 km walked/shift";
-                foodStat.className = "text-red-600 font-bold";
-                foodBar.style.width = "95%";
-                foodBar.className = "bg-red-500 h-full transition-all duration-500";
-
                 pharmaStat.textContent = "Current Waste: 14 Days Frozen WIP (€2M locked)";
                 pharmaStat.className = "text-red-400 font-bold";
                 pharmaBar.style.width = "95%";
                 pharmaBar.className = "bg-red-500 h-full transition-all duration-500";
             }
+
+            const bothOpen = mudaState.food && mudaState.pharma;
+            btn.textContent = bothOpen ? "↺ Hide Solutions & Reset Waste State" : "✨ Reveal Both Lean Solutions & Impact";
+        };
+
+        window.toggleSingleMuda = function(type) {
+            mudaState[type] = !mudaState[type];
+            window.renderMudaCards();
+        };
+
+        window.toggleMudaBeforeAfter = function() {
+            const target = !(mudaState.food && mudaState.pharma);
+            mudaState.food = target;
+            mudaState.pharma = target;
+            window.renderMudaCards();
         };
 
         // ==========================================
@@ -2412,6 +2474,42 @@
 
         window.selectTreeBranch = function(node) {
             document.getElementById('kpi-tree-node-info').innerHTML = treeNotes[node];
+        };
+
+        const matrixNotes = {
+            quick: `🚀 <strong>Quick Wins (High Impact / Low Effort):</strong> Always execute these first! Reorganizing a kitchen into a U-Shaped Cell or setting a Kanban WIP limit costs almost nothing yet immediately slashes Flow Time and Muda.`,
+            major: `🏗️ <strong>Strategic Initiatives (High Impact / High Effort):</strong> Charter these as formal Projects (Lesson 1!) and actively work to reduce effort through phased rollouts—like upgrading a €5M Pharma bottleneck or deploying Digital QA.`,
+            fill: `📌 <strong>Opportunistic Fixes (Low Impact / Low Effort):</strong> Nice-to-have Kaizen improvements that teams can tackle during spare capacity without distracting from the primary bottleneck.`,
+            avoid: `⛔ <strong>Unattractive Traps (Low Impact / High Effort):</strong> Reject immediately! Investing heavy capital or months of engineering into a non-bottleneck step yields €0 extra throughput.`
+        };
+
+        window.selectMatrixQuad = function(quad) {
+            const info = document.getElementById('kpi-tree-node-info');
+            if (info) info.innerHTML = matrixNotes[quad];
+        };
+
+        window.switchSlide15Tab = function(tab) {
+            const treePanel = document.getElementById('s15-panel-tree');
+            const matPanel = document.getElementById('s15-panel-matrix');
+            const btnTree = document.getElementById('s15-tab-tree');
+            const btnMat = document.getElementById('s15-tab-matrix');
+            const badge = document.getElementById('s15-right-badge');
+            if (!treePanel || !matPanel) return;
+
+            if (tab === 'tree') {
+                treePanel.classList.remove('hidden');
+                matPanel.classList.add('hidden');
+                btnTree.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-gold text-white shadow transition";
+                btnMat.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-cream hover:bg-goldlight text-charcoal border border-gold/40 transition";
+                if (badge) badge.textContent = "KPI TREE (CLICK ANY NODE)";
+            } else {
+                matPanel.classList.remove('hidden');
+                treePanel.classList.add('hidden');
+                btnMat.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-gold text-white shadow transition";
+                btnTree.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-cream hover:bg-goldlight text-charcoal border border-gold/40 transition";
+                if (badge) badge.textContent = "IMPACT VS. EFFORT PRIORITIZATION MATRIX";
+                window.selectMatrixQuad('quick');
+            }
         };
 
         let bakeryRevealed = false;
