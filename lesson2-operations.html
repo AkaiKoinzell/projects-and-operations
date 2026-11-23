@@ -103,7 +103,11 @@
          TOP BRANDED HEADER WITH 3-HOUR PACING TRACKER
          ========================================== -->
     <header class="w-full px-6 md:px-8 pt-3 pb-1.5 flex justify-between items-center shrink-0 z-20">
-        <div class="flex items-center space-x-3 cursor-pointer" onclick="window.jumpToSlide(0)" title="Return to Title Slide">
+        <div class="flex items-center space-x-3">
+            <a href="./index.html" title="Back to Course Portal" class="px-3 py-1.5 bg-white/90 hover:bg-gold hover:text-white text-charcoal border border-gold/50 rounded-lg text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                <span>←</span><span>Course Home</span>
+            </a>
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="window.jumpToSlide(0)" title="Return to Title Slide">
             <!-- Stylized Colosseum SVG Logo matching RBS branding -->
             <svg class="w-14 h-10 text-charcoal" viewBox="0 0 120 80" fill="currentColor">
                 <path d="M10,72 L110,72 L95,70 L12,68 Z" />
@@ -132,6 +136,7 @@
                 <div class="font-bold text-[11px] tracking-widest text-charcoal">BUSINESS</div>
                 <div class="font-semibold text-[11px] tracking-widest text-gold">SCHOOL</div>
             </div>
+            </div>
         </div>
 
         <!-- Center Pacing & Quick Action Bar -->
@@ -152,6 +157,9 @@
             <button onclick="window.toggleSlideGrid()" class="px-2.5 py-0.5 rounded-full bg-gold text-white hover:bg-goldhover text-xs font-bold transition" title="Shortcut: G">
                 ⊞ 17-Slide Map
             </button>
+            <button id="fullscreen-btn" onclick="window.toggleFullscreen()" class="px-2.5 py-0.5 rounded-full bg-cream hover:bg-charcoal hover:text-white text-charcoal text-xs font-bold transition" title="Shortcut: F">
+                ⛶ Fullscreen
+            </button>
         </div>
 
         <div class="text-right">
@@ -159,6 +167,11 @@
             <div class="text-gold font-bold text-xs md:text-sm tracking-wide leading-tight">FOR A BETTER WORLD</div>
         </div>
     </header>
+
+    <!-- Top Slide Progress Line -->
+    <div class="w-full h-1 bg-gold/15 shrink-0 z-20">
+        <div id="top-progress-bar" class="h-full bg-gold transition-all duration-300" style="width: 6%;"></div>
+    </div>
 
     <!-- ==========================================
          MAIN SLIDE STAGE (16 SLIDES)
@@ -708,7 +721,7 @@
                         <h3 class="text-lg font-bold text-white mb-3">Which Factory Manager deserves the promotion?</h3>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                            <div onclick="window.testManagerTrap('A')" class="p-3.5 rounded-xl bg-white/10 hover:bg-gold/20 border border-white/15 cursor-pointer transition">
+                            <div id="mgr-card-A" onclick="window.testManagerTrap('A')" class="p-3.5 rounded-xl bg-white/10 hover:bg-gold/20 border border-white/15 cursor-pointer transition">
                                 <div class="font-extrabold text-gold text-sm mb-1">👨‍💼 Manager A ("Busy Bob")</div>
                                 <ul class="space-y-1 text-gray-200">
                                     <li>• Machine Utilization: <strong>99%</strong></li>
@@ -719,7 +732,7 @@
                                 <div class="mt-2 font-bold text-gold underline">Click to Evaluate Manager A →</div>
                             </div>
 
-                            <div onclick="window.testManagerTrap('B')" class="p-3.5 rounded-xl bg-white/10 hover:bg-gold/20 border border-white/15 cursor-pointer transition">
+                            <div id="mgr-card-B" onclick="window.testManagerTrap('B')" class="p-3.5 rounded-xl bg-white/10 hover:bg-gold/20 border border-white/15 cursor-pointer transition">
                                 <div class="font-extrabold text-emerald-300 text-sm mb-1">👩‍💼 Manager B ("Lean Elena")</div>
                                 <ul class="space-y-1 text-gray-200">
                                     <li>• Machine Utilization: <strong>82%</strong></li>
@@ -1136,12 +1149,12 @@
                         <h3 class="text-lg font-bold text-white mt-3 mb-2">Which upgrade do you choose?</h3>
 
                         <div class="space-y-2.5">
-                            <button onclick="window.evaluatePharmaLab('A')" class="w-full text-left p-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition">
+                            <button id="pharma-opt-A" onclick="window.evaluatePharmaLab('A')" class="w-full text-left p-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition">
                                 <div class="text-sm md:text-base font-bold text-white">Option A: Upgrade <span class="text-gold">Step 1 to 150 L/d</span></div>
                                 <div class="text-xs text-gray-300 mt-0.5">Click after class vote to reveal daily profit impact →</div>
                             </button>
 
-                            <button onclick="window.evaluatePharmaLab('B')" class="w-full text-left p-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition">
+                            <button id="pharma-opt-B" onclick="window.evaluatePharmaLab('B')" class="w-full text-left p-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition">
                                 <div class="text-sm md:text-base font-bold text-white">Option B: Upgrade <span class="text-gold">Step 2 to 80 L/d</span></div>
                                 <div class="text-xs text-gray-300 mt-0.5">Click after class vote to reveal daily profit impact →</div>
                             </button>
@@ -1555,9 +1568,11 @@
                 </div>
             </div>
 
-            <div class="mt-5 flex gap-3">
+            <div class="mt-5 flex flex-wrap justify-center gap-3">
                 <button onclick="window.jumpToSlide(0)" class="px-5 py-2 bg-charcoal hover:bg-black text-white text-xs font-bold rounded-lg transition">↺ Restart Presentation</button>
-                <button onclick="window.toggleSlideGrid()" class="px-5 py-2 bg-gold hover:bg-goldhover text-white text-xs font-bold rounded-lg transition">⊞ View All 17 Slides</button>
+                <button onclick="window.toggleSlideGrid()" class="px-5 py-2 bg-white border border-gold text-charcoal hover:bg-goldlight text-xs font-bold rounded-lg transition">⊞ View All 17 Slides</button>
+                <a href="./lesson1-foundations.html" class="px-5 py-2 bg-white border border-gold text-charcoal hover:bg-goldlight text-xs font-bold rounded-lg transition">← Review Lesson 1</a>
+                <a href="./index.html" class="px-5 py-2 bg-gold hover:bg-goldhover text-white text-xs font-bold rounded-lg shadow transition">← Back to Course Portal</a>
             </div>
         </section>
 
@@ -1857,6 +1872,9 @@
             document.getElementById('slide-counter').textContent = `Slide ${window.currentSlide + 1} of ${window.totalSlides}`;
             document.getElementById('prevBtn').disabled = window.currentSlide === 0;
             document.getElementById('nextBtn').disabled = window.currentSlide === window.totalSlides - 1;
+            const pct = Math.round(((window.currentSlide + 1) / window.totalSlides) * 100);
+            const progBar = document.getElementById('top-progress-bar');
+            if (progBar) progBar.style.width = `${pct}%`;
 
             const info = window.slideEnrichment[window.currentSlide];
             if (info) {
@@ -1866,6 +1884,22 @@
                 document.getElementById('ribbon-tool-name').textContent = info.toolName;
             }
         };
+
+        window.toggleFullscreen = function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(error => {
+                    console.error('Unable to enter fullscreen:', error);
+                });
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen().catch(error => {
+                    console.error('Unable to exit fullscreen:', error);
+                });
+            }
+        };
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (btn) btn.textContent = document.fullscreenElement ? '⛶ Exit Full' : '⛶ Fullscreen';
+        });
 
         // ==========================================
         // CENTRAL SLIDE STAGE KEYBOARD ZOOM (+ / - / 0)
@@ -1954,6 +1988,7 @@
             if (idx === 0) window.setOpsProfile('ryanair');
             if (idx === 1) window.setOpsProfile('ferrari');
             if (idx === 2) window.setOpsProfile('amazon');
+            if (idx === 3) window.setOpsProfile('ferrari');
         };
 
         window.setOpsProfile = function(prof) {
@@ -2097,6 +2132,14 @@
         };
 
         window.testManagerTrap = function(mgr) {
+            ['A', 'B'].forEach(m => {
+                const el = document.getElementById(`mgr-card-${m}`);
+                if (el) {
+                    el.className = (m === mgr)
+                        ? "p-3.5 rounded-xl bg-gold/25 border-2 border-gold ring-2 ring-gold/40 cursor-pointer transition"
+                        : "p-3.5 rounded-xl bg-white/10 hover:bg-gold/20 border border-white/15 cursor-pointer transition";
+                }
+            });
             const res = document.getElementById('mgr-trap-result');
             if (mgr === 'A') {
                 res.innerHTML = `🚨 <strong>Manager A ("Busy Bob") is a Disaster!</strong> Chasing <strong>99% Utilization</strong> caused machine breakdowns, 20% defects, and a warehouse full of unsold inventory (Overproduction Muda).`;
@@ -2227,6 +2270,14 @@
         };
 
         window.evaluatePharmaLab = function(opt) {
+            ['A', 'B'].forEach(o => {
+                const el = document.getElementById(`pharma-opt-${o}`);
+                if (el) {
+                    el.className = (o === opt)
+                        ? "w-full text-left p-3.5 rounded-xl bg-gold/25 border-2 border-gold ring-2 ring-gold/40 transition"
+                        : "w-full text-left p-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition";
+                }
+            });
             const res = document.getElementById('pharma-lab-result');
             if (opt === 'A') {
                 res.innerHTML = `🚨 <strong>Option A is the €5M TRAP!</strong><br>• Current Baseline Output = Min(100, 40, 80) = <strong>40 L/day</strong> (€2.0M/day profit).<br>• After Option A (Step 1 ➔ 150 L/d): Output = Min(150, 40, 80) = <strong>Still 40 L/day!</strong><br>• Extra Profit = <strong>€0 / day</strong>. You burned €5 Million speeding up a non-bottleneck!`;
@@ -2437,6 +2488,7 @@
             if (e.key === 't' || e.key === 'T') window.openEnrichment('tool');
             if (e.key === 's' || e.key === 'S') window.openEnrichment('syllabus');
             if (e.key === 'g' || e.key === 'G') window.toggleSlideGrid();
+            if (e.key === 'f' || e.key === 'F') window.toggleFullscreen();
 
             // Central Slide Stage Zoom via + and - keys (and 0 to reset)
             if (e.key === '+' || e.key === '=' || e.code === 'NumpadAdd') {
